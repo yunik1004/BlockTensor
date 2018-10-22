@@ -10,3 +10,6 @@ script:
   - npm run build
   - cd ../backend
   - npm start &
+branches:
+  only:
+    - master
