@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "node"
+install:
+  - cd backend
+  - npm install
+  - cd ../frontend
+  - npm install
+script:
+  - npm run build
+  - cd ../backend
+  - npm start &
+branches:
+  only:
+    - master
