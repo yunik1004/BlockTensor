@@ -1,6 +1,6 @@
 # Frontend server for TensorBlock
 
-> This is the backend server for TensorBlock application using VueJS
+> This is the frontend server for TensorBlock application using VueJS
 
 ## Build Setup
 

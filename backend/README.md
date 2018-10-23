@@ -8,10 +8,10 @@
 # install dependencies
 npm install
 
-# set environment variable for Windows
+# set environment variable for debugging on Windows
 SET DEBUG=backend:*
 
-# set environment variable for other OS
+# set environment variable for debugging on other OS
 DEBUG=backend:*
 
 # serve at localhost:3000
