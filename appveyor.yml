@@ -22,7 +22,7 @@ test_script:
   - npm --version
 # Check frontend can be run without error
   - cd frontend
-  - DEBUG=backend:*
+  - SET DEBUG=backend:*
   - npm run dev & sleep 10
 # Build frontend for production
   - npm run build
