@@ -13,9 +13,11 @@ install:
 
 script:
 # Check frontend can be run without error
-  - npm run dev & wait-on http://localhost:8080
+  - npm run dev &
+  - wait-on http://localhost:8080/
 # Build frontend for production
   - npm run build
   - cd ../backend
 # Check backend can be run without error
-  - npm start & wait-on http://localhost:3000
+  - npm start &
+  - wait-on http://localhost:3000/
