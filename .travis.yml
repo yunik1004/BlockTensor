@@ -13,8 +13,10 @@ install:
 script:
 # Check frontend can be run without error
   - npm run dev &
+  - sleep 10
 # Build frontend for production
   - npm run build
   - cd ../backend
 # Check backend can be run without error
   - npm start &
+  - sleep 5
