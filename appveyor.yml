@@ -1,18 +1,25 @@
-# .travis.yml
-language: node_js
+environment:
+  npm_version: latest
+  matrix:
+    - nodejs_version: "8"
+    - nodejs_version: "10"
 
-node_js:
-  - "node"
-  - "lts/*"
+platform:
+  - x86
+  - x64
 
 install:
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - npm --version
   - cd backend
   - npm install
   - cd ../frontend
   - npm install
   - cd ..
 
-script:
+test_script:
+  - node --version
+  - npm --version
 # Check frontend can be run without error
   - cd frontend
   - DEBUG=backend:*
@@ -23,3 +30,5 @@ script:
 # Check backend can be run without error
   - npm start & sleep 5
   - cd ..
+
+build: off

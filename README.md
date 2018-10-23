@@ -1,6 +1,6 @@
 # BlockTensor
 
-[![Build status](https://travis-ci.org/yunik1004/BlockTensor.svg?branch=master)](https://travis-ci.org/yunik1004/BlockTensor)
+[![Travis Build status](https://travis-ci.org/yunik1004/BlockTensor.svg?branch=master)](https://travis-ci.org/yunik1004/BlockTensor) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/dh9x31n45t7neiu6/branch/master?svg=true)](https://ci.appveyor.com/project/yunik1004/blocktensor)
 
 > 2018 Fall Semestor CS408 Project
 
