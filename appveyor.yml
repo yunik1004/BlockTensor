@@ -23,7 +23,7 @@ test_script:
 # Check frontend can be run without error
   - cd frontend
   - ps: $locfg = Get-Location
-  - ps: $jobfg = Start-Job -ArgumentList $locfg -ScriptBlock {Param($x); npm run dev --prefix $x}; sleep 10
+  - ps: $jobfg = Start-Job -ArgumentList $locfg -ScriptBlock {Param($x); npm run dev --prefix $x}; sleep 20
   - ps: Receive-Job $jobfg
   - ps: Stop-Job $jobfg
 # Build frontend for production
@@ -31,7 +31,7 @@ test_script:
 # Check backend can be run without error
   - cd ../backend
   - ps: $locbg = Get-Location
-  - ps: $jobbg = Start-Job -ArgumentList $locbg -ScriptBlock {Param($x); npm start --prefix $x}; sleep 5
+  - ps: $jobbg = Start-Job -ArgumentList $locbg -ScriptBlock {Param($x); npm start --prefix $x}; sleep 10
   - ps: Receive-Job $jobbg
   - ps: Stop-Job $jobbg
   - cd ..
