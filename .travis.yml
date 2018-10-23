@@ -4,10 +4,6 @@ language: node_js
 node_js:
   - "node"
 
-branches:
-  only:
-    - master
-
 install:
   - cd backend
   - npm install
@@ -15,6 +11,10 @@ install:
   - npm install
 
 script:
+# Check frontend can be run without error
+  - npm run dev &
+# Build frontend for production
   - npm run build
   - cd ../backend
+# Check backend can be run without error
   - npm start &
