@@ -25,14 +25,15 @@ test_script:
   - ps: $locfg = Get-Location
   - ps: $jobfg = Start-Job -ArgumentList $locfg -ScriptBlock {Param($x); npm run dev --prefix $x}; sleep 10
   - ps: Receive-Job $jobfg
+  - ps: Stop-Job $jobfg
 # Build frontend for production
   - npm run build
 # Check backend can be run without error
   - cd ../backend
   - ps: $locbg = Get-Location
-  - SET DEBUG=backend:*
   - ps: $jobbg = Start-Job -ArgumentList $locbg -ScriptBlock {Param($x); npm start --prefix $x}; sleep 5
   - ps: Receive-Job $jobbg
+  - ps: Stop-Job $jobbg
   - cd ..
 
 build: off

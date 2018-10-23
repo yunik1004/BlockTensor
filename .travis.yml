@@ -24,6 +24,5 @@ script:
   - npm run build
 # Check backend can be run without error
   - cd ../backend
-  - DEBUG=backend:*
   - npm start & sleep 5
   - cd ..
