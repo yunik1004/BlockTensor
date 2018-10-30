@@ -1,13 +1,20 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+  <div>
+    <Headerbar/>
+    <div id="app">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
+import Headerbar from '@/components/toolbar/Headerbar.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Headerbar
+  }
 }
 </script>
 

@@ -4,9 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios
+Vue.use(VueAxios, axios)
+/* Ignore pre-defined elements in Blockly */
+Vue.config.ignoredElements = ['xml', 'category', 'block', 'value', 'field']
 
 /* eslint-disable no-new */
 new Vue({
