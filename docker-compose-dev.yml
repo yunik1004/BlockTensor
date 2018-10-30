@@ -2,9 +2,7 @@ version: '3'
 
 services:
   blocktensor-backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile-dev
+    build: ./backend
     container_name: blocktensor-backend
     ports:
       - '3000:3000'
@@ -12,9 +10,7 @@ services:
       restart_policy:
         condition: on-failure
   blocktensor-frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile-dev
+    build: ./frontend
     container_name: blocktensor-frontend
     ports:
       - '8080:8080'

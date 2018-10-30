@@ -3,8 +3,7 @@ LABEL maintainer="inkyuhak@gmail.com"
 
 COPY . /src
 
-RUN DEBUG=backend:*
-RUN cd /src; npm install
+RUN cd /src; DEBUG=backend:*; npm install
 
 WORKDIR /src
 
