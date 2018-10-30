@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  blocktensor:
+    build: .
+    container_name: blocktensor
+    ports:
+      - '3000:3000'
+    deploy:
+      restart_policy:
+        condition: on-failure

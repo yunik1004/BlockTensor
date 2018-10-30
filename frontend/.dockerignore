@@ -1,0 +1,14 @@
+# Node related directories and files
+node_modules/
+npm-debug.log
+
+# Git directory
+.git
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

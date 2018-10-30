@@ -1,0 +1,13 @@
+FROM node:10
+LABEL maintainer="inkyuhak@gmail.com"
+
+COPY . /src
+
+RUN DEBUG=backend:*
+RUN cd /src; npm install
+
+WORKDIR /src
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
