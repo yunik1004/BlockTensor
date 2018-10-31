@@ -6,16 +6,10 @@ services:
     container_name: blocktensor-backend
     ports:
       - '3000:3000'
-    deploy:
-      restart_policy:
-        condition: on-failure
+      - '8080:8080'
   blocktensor-frontend:
     build: ./frontend
     container_name: blocktensor-frontend
-    ports:
-      - '8080:8080'
     depends_on:
       - blocktensor-backend
-    deploy:
-      restart_policy:
-        condition: on-failure
+    network_mode: "service:blocktensor-backend"
