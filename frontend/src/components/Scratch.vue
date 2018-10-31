@@ -1,52 +1,18 @@
 <template>
     <div>
-        <xml id="startBlocks" style="display: none"></xml>
-        <div class="demo">
-            <div>
-                <select id="locale">
-                    <option value="en">EN</option>
-                    <option value="ko">KO</option>
-                </select>
-
-                <div id="editor" style="height: 480px; width: 600px;">
-
-                </div>
-
-                <xml id="toolbox" style="display: none">
-                    <category name="Logic">
-                        <block type="controls_if"></block>
-                        <block type="logic_compare"></block>
-                        <block type="logic_operation"></block>
-                        <block type="logic_negate"></block>
-                        <block type="logic_boolean"></block>
-                    </category>
-                    <category name="Loops">
-                        <block type="controls_repeat_ext">
-                            <value name="TIMES">
-                                <block type="math_number">
-                                    <field name="NUM">10</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="controls_whileUntil"></block>
-                    </category>
-                    <category name="Math">
-                        <block type="math_number"></block>
-                        <block type="math_arithmetic"></block>
-                        <block type="math_single"></block>
-                    </category>
-                    <category name="Text">
-                        <block type="text"></block>
-                        <block type="text_length"></block>
-                        <block type="text_print"></block>
-                    </category>
-                </xml>
-            </div>
-            <div>
-                <p class="label">JS</p>
-                <pre language="javascript" id="js"></pre>
-            </div>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js" type="application/javascript"></script>
+        <div id="blockly-div" style="height: 480px; width: 400px;"></div>
+        <xml id="toolbox" style="display: none">
+            <category name="Loops" colour="120">
+                <block type="controls_repeat_ext"></block>
+                <block type="test_module"></block>
+            </category>
+        </xml>
+        <div>
+            <p class="label">JS</p>
+            <pre language="javascript" id="js" style="text-align: left;"></pre>
         </div>
+        <button id="runjs">Run code</button>
     </div>
 </template>
 
@@ -61,64 +27,64 @@ export default {
     }
   },
   mounted () {
-    var editor
-    var code = document.getElementById('startBlocks')
+    var workspace = Blockly.inject('blockly-div', {
+      toolbox: document.getElementById('toolbox'),
+      toolboxPosition: 'end',
+      horizontalLayout: true,
+      scrollbars: false
+    })
 
-    function render (element, toolbox) {
-      if (editor) {
-        editor.removeChangeListener(updateCode)
-        code = Blockly.Xml.workspaceToDom(editor)
-        editor.dispose()
+    var mathChangeJson = {
+      'message0': 'change %1 by %2',
+      'args0': [
+        {'type': 'field_variable', 'name': 'VAR', 'variable': 'item', 'variableTypes': ['']},
+        {'type': 'input_value', 'name': 'DELTA', 'check': 'Number'}
+      ],
+      'previousStatement': null,
+      'nextStatement': null,
+      'colour': 230,
+      'tooltip': 'Change the number into another number'
+    }
+
+    Blockly.Blocks['test_module'] = {
+      init: function () {
+        this.jsonInit(mathChangeJson)
       }
-      editor = Blockly.inject(element, {
-        toolbox: document.getElementById(toolbox)
-      })
-
-      Blockly.Xml.domToWorkspace(code, editor)
-
-      editor.addChangeListener(updateCode)
-
-      return editor
     }
 
-    function updateCode () {
-      document.getElementById('js').innerText = Blockly.JavaScript.workspaceToCode(editor)
+    Blockly.JavaScript['test_module'] = function (block) {
+      var code = `
+        const model = tf.sequential()
+        model.add(tf.layers.dense({units: 1, inputShape: [1]}))
+        model.compile({loss: 'meanSquaredError', optimizer: 'sgd'})
+        const xs = tf.tensor2d([1, 2, 3, 4], [4, 1])
+        const ys = tf.tensor2d([1, 3, 5, 7], [4, 1])
+        model.fit(xs, ys, {epochs: 10}).then(() => {
+          model.predict(tf.tensor2d([5], [1, 1])).print()
+        })
+      `
+      return code
     }
 
-    editor = render('editor', 'toolbox')
+    function myUpdateFunction (event) {
+      var code = Blockly.JavaScript.workspaceToCode(workspace)
+      document.getElementById('js').innerText = code
+    }
+    workspace.addChangeListener(myUpdateFunction)
 
-    updateCode()
-
-    document.getElementById('locale').onchange = (e) => {
-      import('node-blockly/lib/i18n/' + e.target.value).then((locale) => {
-        Blockly.setLocale(locale)
-        render('editor', 'toolbox')
-      })
+    document.getElementById('runjs').onclick = function () {
+      var code = Blockly.JavaScript.workspaceToCode(workspace)
+      try {
+        // eslint-disable-next-line
+        eval(code)
+      } catch (e) {
+        alert(e)
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-pre {
-    font-size: 10px;
-    border: 1px solid #aaa;
-    margin: 0 0 20px 0;
-    padding: 10px;
-    text-align: left;
-}
-p.label {
-    margin: 5px 0
-}
-.demo {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-.demo > div {
-    flex: 1 1
-}
-select {
-    margin-bottom: 10px;
-}
+
 </style>
