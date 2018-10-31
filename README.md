@@ -4,7 +4,7 @@
 
 > 2018 Fall Semestor CS408 Project
 
-## Build
+## Build with NPM
 
 ### Dependencies
 - NPM
@@ -33,4 +33,20 @@ $ cd frontend
 $ npm run build
 $ cd ../backend
 $ npm start
+```
+
+## Build with Docker
+
+### Dependencies
+- Docker
+
+
+### Debug
+```bash
+$ docker-compose -f docker-compose-dev.yml up -d
+```
+
+### Release
+```bash
+$ docker-compose up -d
 ```
