@@ -3,13 +3,12 @@ jobs:
   deploy:
     machine:
       enabled: true
-    working_directory: ~/blocktensor
     filters:
       branches:
         only: master
     steps:
       - run:
-          command: ls -al
+          command: tree
       - run:
           name: 'Deploy to Heroku'
           command: |
