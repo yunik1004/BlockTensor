@@ -7,8 +7,7 @@ jobs:
       branches:
         only: master
     steps:
-      - run:
-          command: tree
+      - run: ls -al
       - run:
           name: 'Deploy to Heroku'
           command: |
