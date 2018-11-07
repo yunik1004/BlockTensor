@@ -1,13 +1,12 @@
 version: 2
 jobs:
-  deploy:
+  build:
     machine:
       enabled: true
     filters:
       branches:
         only: master
     steps:
-      - run: ls -al
       - run:
           name: 'Deploy to Heroku'
           command: |
@@ -19,4 +18,4 @@ workflows:
   version: 2
   workflow:
     jobs:
-    - deploy
+    - build
