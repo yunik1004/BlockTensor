@@ -1,10 +1,5 @@
 version: 2
 jobs:
-  build:
-    machine:
-      enabled: true
-    steps:
-      - run: echo 'No build'
   deploy:
     machine:
       enabled: true
@@ -18,3 +13,9 @@ jobs:
           docker login --email=$HEROKU_LOGIN --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
           docker build --rm=false -t registry.heroku.com/blocktensor/web .
           docker push registry.heroku.com/blocktensor/web:latest
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - deploy
