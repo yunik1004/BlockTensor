@@ -9,11 +9,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Deploy to Heroku'
+          name: 'Deploy the docker image'
           command: |
             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
             docker build --rm=false -t registry.heroku.com/blocktensor/web .
             docker push registry.heroku.com/blocktensor/web:latest
+      - run:
+          name: 'Setup Heroku'
+          command: |
+            chmod +x .circleci/setup-heroku.sh
+            .circleci/setup-heroku.sh
+      - run:
+          name: 'Deploy to Heroku'
+          command: |
+            heroku container:release web --app blocktensor
 
 workflows:
   version: 2
