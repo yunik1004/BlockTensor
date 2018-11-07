@@ -1,6 +1,6 @@
 # BlockTensor
 
-[![Travis Build status](https://travis-ci.org/yunik1004/BlockTensor.svg?branch=master)](https://travis-ci.org/yunik1004/BlockTensor) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/dh9x31n45t7neiu6/branch/master?svg=true)](https://ci.appveyor.com/project/yunik1004/blocktensor) [![Docker Build Status](https://img.shields.io/docker/build/yunik1004/blocktensor.svg)](https://hub.docker.com/r/yunik1004/blocktensor)
+[![Travis Build status](https://travis-ci.org/yunik1004/BlockTensor.svg?branch=master)](https://travis-ci.org/yunik1004/BlockTensor) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/dh9x31n45t7neiu6/branch/master?svg=true)](https://ci.appveyor.com/project/yunik1004/blocktensor) [![Docker Build Status](https://img.shields.io/docker/build/yunik1004/blocktensor.svg)](https://hub.docker.com/r/yunik1004/blocktensor) [![CircleCI Build Status](https://circleci.com/gh/yunik1004/BlockTensor/tree/master.svg?style=svg)](https://circleci.com/gh/yunik1004/BlockTensor/tree/master)
 
 > 2018 Fall Semestor CS408 Project
 
