@@ -12,7 +12,7 @@ jobs:
           name: 'Deploy to Heroku'
           command: |
             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
-            docker build --rm=false -t registry.heroku.com/blocktensor/web
+            docker build --rm=false -t registry.heroku.com/blocktensor/web .
             docker push registry.heroku.com/blocktensor/web:latest
 
 workflows:
