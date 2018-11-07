@@ -9,6 +9,8 @@ jobs:
         only: master
     steps:
       - run:
+          command: ls -al
+      - run:
           name: 'Deploy to Heroku'
           command: |
             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
