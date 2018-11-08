@@ -5,6 +5,10 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import 'expose-loader?$!expose-loader?jQuery!jquery'
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.css'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
