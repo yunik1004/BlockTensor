@@ -17,6 +17,13 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/graphql': {
+        target: 'http://localhost:3000/graphql',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/graphql': ''
+        }
       }
     },
 

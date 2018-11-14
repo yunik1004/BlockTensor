@@ -1,7 +1,7 @@
 <template>
-    <p>
-      <router-link :to="{name: 'Main'}">TENSOR BLOCK</router-link>
-    </p>
+  <p>
+    <router-link :to="{name: 'Main'}">TENSOR BLOCK</router-link>
+  </p>
 </template>
 
 <script>
