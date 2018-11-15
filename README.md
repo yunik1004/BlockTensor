@@ -22,7 +22,7 @@ For the backend server,
 ```bash
 $ cd backend
 $ DEBUG=backend*
-$ npm start
+$ npm run dev
 ```
 
 ### Release
