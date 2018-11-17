@@ -4,76 +4,67 @@
     <xml id="toolbox" style="display: none">
       <category name="Loops" colour="120">
         <block type="controls_repeat_ext"></block>
-        <block type="test_module"></block>
+      </category>
+      <category name="ML" colour="120">
+        <block-component v-for="type in mlBlocks" :type="type" :key="type"></block-component>
       </category>
     </xml>
-    <div>
-      <p class="label">JS</p>
-      <pre language="javascript" id="js" style="text-align: left;"></pre>
-    </div>
-    <button id="runjs">Run code</button>
+    <button @click="showCode()">Show code</button>
+    <button @click="runCode()">Run code</button>
   </div>
 </template>
 
 <script>
 import Blockly from 'node-blockly/browser'
+import BlockDB from '../database/BlockDB'
+
+let blockComponent = {
+  props: ['type'],
+  template: '<block :type="type"></block>',
+  mounted: function () {
+    Blockly.Blocks[this.type] = {
+      init: function () {
+        this.jsonInit(BlockDB[this.type]['struct'])
+      }
+    }
+
+    Blockly.JavaScript[this.type] = BlockDB[this.type]['code']
+  }
+}
 
 export default {
   name: 'Scratch',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      workspace: null,
+      mlBlocks: []
     }
   },
+  created () {
+    this.mlBlocks.push('test_module')
+  },
   mounted () {
-    var workspace = Blockly.inject('blockly-div', {
+    this.workspace = Blockly.inject('blockly-div', {
       toolbox: document.getElementById('toolbox'),
-      toolboxPosition: 'end',
-      horizontalLayout: true,
       scrollbars: false
     })
-    var mathChangeJson = {
-      'message0': 'change %1 by %2',
-      'args0': [
-        {'type': 'field_variable', 'name': 'VAR', 'variable': 'item', 'variableTypes': ['']},
-        {'type': 'input_value', 'name': 'DELTA', 'check': 'Number'}
-      ],
-      'previousStatement': null,
-      'nextStatement': null,
-      'colour': 230,
-      'tooltip': 'Change the number into another number'
-    }
-    Blockly.Blocks['test_module'] = {
-      init: function () {
-        this.jsonInit(mathChangeJson)
-      }
-    }
-    Blockly.JavaScript['test_module'] = function (block) {
-      var code = `
-        const model = tf.sequential()
-        model.add(tf.layers.dense({units: 1, inputShape: [1]}))
-        model.compile({loss: 'meanSquaredError', optimizer: 'sgd'})
-        const xs = tf.tensor2d([1, 2, 3, 4], [4, 1])
-        const ys = tf.tensor2d([1, 3, 5, 7], [4, 1])
-        model.fit(xs, ys, {epochs: 10}).then(() => {
-          model.predict(tf.tensor2d([5], [1, 1])).print()
-        })
-      `
-      return code
-    }
-    function myUpdateFunction (event) {
-      var code = Blockly.JavaScript.workspaceToCode(workspace)
-      document.getElementById('js').innerText = code
-    }
-    workspace.addChangeListener(myUpdateFunction)
-    document.getElementById('runjs').onclick = function () {
-      var code = Blockly.JavaScript.workspaceToCode(workspace)
+  },
+  components: {
+    'block-component': blockComponent
+  },
+  methods: {
+    runCode: function () {
+      let code = Blockly.JavaScript.workspaceToCode(this.workspace)
       try {
         // eslint-disable-next-line
         eval(code)
       } catch (e) {
         alert(e)
       }
+    },
+    showCode: function () {
+      let code = Blockly.JavaScript.workspaceToCode(this.workspace)
+      alert(code)
     }
   }
 }
