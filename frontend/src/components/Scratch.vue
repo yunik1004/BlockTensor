@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="blockly-div" style="height: 480px; width: 400px;"></div>
+    <div id="blockly-div" style="height: 480px; width: 800px;"></div>
     <xml id="toolbox" style="display: none">
       <category name="Loops" colour="120">
         <block type="controls_repeat_ext"></block>

@@ -13,8 +13,8 @@ export default new Router({
   routes: [
     { path: '/', name: 'Main', component: Main },
     { path: '/scratch', name: 'Scratch', component: Scratch },
-    { path: '*', name: 'NotFound', component: NotFound },
     { path: '/Scroll', name: 'Scroll', component: Scroll },
-    { path: '/Select', name: 'Select', component: Select }
+    { path: '/Select', name: 'Select', component: Select },
+    { path: '*', name: 'NotFound', component: NotFound }
   ]
 })
