@@ -13,7 +13,7 @@
         </div>
         <h1 class="part-1" v-animate="{value: 'bounceInLeft'}">BlockTensor</h1>
         <h3 class="part-1" v-animate="{value: 'bounceInLeft', delay: 300}">context</h3>
-        <button type="button" class="button-Main" onclick="location.href='Select'" v-animate="{value: 'bounceInRight', delay: 600}">Start</button>
+        <b-button type="button" class="button-Main" to="Select" v-animate="{value: 'bounceInRight', delay: 600}">Start</b-button>
       </div>
       <div class="page-2 page">
         <h1 class="part-2" v-animate="{value: 'bounceInLeft'}">Second page</h1>

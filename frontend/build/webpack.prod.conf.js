@@ -96,8 +96,10 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
         },
         manifest: {
           minChunks: Infinity
