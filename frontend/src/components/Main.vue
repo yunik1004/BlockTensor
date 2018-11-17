@@ -11,7 +11,7 @@
     </div>
     <button type="button" class="btn btn-sm btn-default">Default</button>
     <button type="button" class="btn btn-sm btn-primary">Primary</button>
-    <div>{{hello}}</div>
+    <pre>{{ block }}</pre>
   </div>
 </template>
 
@@ -22,13 +22,18 @@ export default {
   name: 'Main',
   data () {
     return {
-      hello: null,
+      block: null,
       loading: 0
     }
   },
   apollo: {
-    hello: {
-      query: gql`query{hello}`,
+    block: {
+      query: gql`query{
+        block(blockID: 2) {
+          struct
+          code
+        }
+      }`,
       loadingKey: 'loading'
     }
   }
