@@ -4,13 +4,9 @@
         <p>
             <router-link :to="{name: 'Scratch'}">Hyperlink to scratch</router-link>
         </p>
-        <div class="row">
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-        </div>
-        <button type="button" class="btn btn-sm btn-default">Default</button>
-        <button type="button" class="btn btn-sm btn-primary">Primary</button>
+         <p>
+            <router-link :to="{name: 'Scroll'}">Scroll</router-link>
+         </p>
     </div>
 </template>
 
