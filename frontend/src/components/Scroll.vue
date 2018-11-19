@@ -1,6 +1,6 @@
 <template>
   <div class="fullpage-container">
-    <div class="button-group">
+    <div class="btn-group-vertical">
       <button type="button" :class="{ active:index == 0 }" @click="moveTo(0)">first</button>
       <button type="button" :class="{ active:index == 1 }" @click="moveTo(1)">second</button>
       <button type="button" :class="{ active:index == 2 }" @click="moveTo(2)">third</button>
@@ -91,14 +91,14 @@ export default {
   background: #C4DB94;
 }
 
-.button-group {
+.btn-group-vertical {
   position: absolute;
   top: 30px;
   left: 30px;
   z-index: 9;
 }
 
-.button-group button {
+.btn-group-vertical button {
   display: inline-block;
   margin: 10px;
   color: #000;
@@ -111,7 +111,7 @@ export default {
   outline: none;
 }
 
-.button-group button:active {
+.btn-group-vertical button:active {
   background: rgba(0, 0, 0, .5);
   color: #fff;
 }
