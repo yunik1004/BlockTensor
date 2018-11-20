@@ -139,6 +139,34 @@ BlockDB['denseLayer'] = {
   }
 }
 
+BlockDB['activationLayer'] = {
+  'struct': {
+    'message0': 'Activation layer %1',
+    'args0': [
+      {
+        'type': 'field_dropdown',
+        'name': 'ACTIVATION',
+        'options': [
+          ['linear', `'linear'`],
+          ['relu', `'relu'`],
+          ['sigmoid', `'sigmoid'`],
+          ['softmax', `'softmax'`],
+          ['tanh', `'tanh'`]
+        ]
+      }
+    ],
+    'previousStatement': null,
+    'nextStatement': null,
+    'colour': 125,
+    'tooltip': 'Define an activation layer'
+  },
+  'code': function (block) {
+    let activation = block.getFieldValue('ACTIVATION')
+    let code = `tf.layers.activation({activation: ` + activation + `})\n`
+    return code
+  }
+}
+
 BlockDB['train'] = {
   'struct': {
     'message0': 'Train the model with %1 epochs',

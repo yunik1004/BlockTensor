@@ -64,7 +64,7 @@ export default {
     }
   },
   created () {
-    let modules = ['sequentialModel', 'denseLayer', 'train']
+    let modules = ['sequentialModel', 'denseLayer', 'activationLayer', 'train']
     let traindata = [1, 2, 3, 4, 5]
     let trainlabels = [1, 3, 5, 7, 9]
     let testdata = [5, 7]
