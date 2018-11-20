@@ -52,8 +52,22 @@ BlockDB['sequentialModel'] = {
         'name': 'LAYERS'
       }
     ],
-    'message2': 'Loss function %1',
+    'message2': 'Output layer activation %1',
     'args2': [
+      {
+        'type': 'field_dropdown',
+        'name': 'ACTIVATION_OUTPUT',
+        'options': [
+          ['linear', `'linear'`],
+          ['relu', `'relu'`],
+          ['sigmoid', `'sigmoid'`],
+          ['softmax', `'softmax'`],
+          ['tanh', `'tanh'`]
+        ]
+      }
+    ],
+    'message3': 'Loss function %1',
+    'args3': [
       {
         'type': 'field_dropdown',
         'name': 'LOSS',
@@ -64,8 +78,8 @@ BlockDB['sequentialModel'] = {
         ]
       }
     ],
-    'message3': 'Optimizer %1',
-    'args3': [
+    'message4': 'Optimizer %1',
+    'args4': [
       {
         'type': 'field_dropdown',
         'name': 'OPTIMIZER',
@@ -99,6 +113,9 @@ BlockDB['sequentialModel'] = {
 
     let outputSize = block.getFieldValue('OUTPUT_SIZE')
     code += `model.add(tf.layers.dense({units:` + outputSize.toString() + `, inputShape: [tb_output_size]}))\n`
+
+    let outputActivation = block.getFieldValue('ACTIVATION_OUTPUT')
+    code += `model.add(tf.layers.activation({activation: ` + outputActivation + `}))\n`
 
     let loss = block.getFieldValue('LOSS')
     let opt = block.getFieldValue('OPTIMIZER')
