@@ -97,36 +97,39 @@ BlockDB['sequentialModel'] = {
     'tooltip': 'Define a model'
   },
   'code': function (block) {
-    let code = `var generateSequentialModel = function () {\n`
-
-    code += `const model = tf.sequential()\n`
-
     let inputSize = block.getFieldValue('INPUT_SIZE')
-    code += `let tb_output_size = ` + inputSize.toString() + `\n`
 
-    let layers = Blockly.JavaScript.statementToCode(block, 'LAYERS').split('\n')
+    let code = `
+      var generateSequentialModel = function () {
+        const model = tf.sequential()
+        let tb_output_size = ${inputSize}
+    `
+
+    let layers = Blockly.JavaScript.statementToCode(block, 'LAYERS').split('\n').filter(function (entry) { return /\S/.test(entry) })
     for (let i = 0; i < layers.length - 1; i++) {
       let statements = layers[i].split(';')
-      code += `model.add(` + statements[0] + `)\n`
-      code += statements[1] + `\n`
+      code += `
+        model.add(${statements[0]})
+        ${statements[1]}
+      `
     }
 
     let outputSize = block.getFieldValue('OUTPUT_SIZE')
-    code += `model.add(tf.layers.dense({units:` + outputSize.toString() + `, inputShape: [tb_output_size]}))\n`
-
     let outputActivation = block.getFieldValue('ACTIVATION_OUTPUT')
-    code += `model.add(tf.layers.activation({activation: ` + outputActivation + `}))\n`
-
     let loss = block.getFieldValue('LOSS')
     let opt = block.getFieldValue('OPTIMIZER')
 
-    code += `model.compile({loss: ` + loss + `, optimizer: ` + opt + `})\n`
+    code += `
+        model.add(tf.layers.dense({units: ${outputSize}, inputShape: [tb_output_size]}))
+        model.add(tf.layers.activation({activation: ${outputActivation}}))
+        model.compile({loss: ${loss}, optimizer: ${opt}})
 
-    code += `return model\n`
-    code += `}\n`
+        return model
+      }
 
-    code += `let tbModel = generateSequentialModel()\n`
-    code += `let tbInputSize = ` + inputSize.toString() + `\n`
+      let tbModel = generateSequentialModel()
+      let tbInputSize = ${inputSize}
+    `
 
     return code
   }
@@ -150,8 +153,9 @@ BlockDB['denseLayer'] = {
   },
   'code': function (block) {
     let units = block.getFieldValue('UNITS')
-    let code = `tf.layers.dense({units:` + units.toString() + `, inputShape: [tb_output_size]});`
-    code += `tb_output_size = ` + units.toString() + `\n`
+    let code = `
+      tf.layers.dense({units: ${units}, inputShape: [tb_output_size]}); tb_output_size = ${units}
+    `
     return code
   }
 }
@@ -179,7 +183,9 @@ BlockDB['activationLayer'] = {
   },
   'code': function (block) {
     let activation = block.getFieldValue('ACTIVATION')
-    let code = `tf.layers.activation({activation: ` + activation + `})\n`
+    let code = `
+      tf.layers.activation({activation: ${activation}})
+    `
     return code
   }
 }
@@ -199,24 +205,28 @@ BlockDB['train'] = {
     'tooltip': 'Train the model'
   },
   'code': function (block) {
-    let code = `let tbTrainData = this.trainData\n`
-    code += `let tbTrainLabels = this.trainLabels\n`
-
-    code += `var train = function (model) {\n`
-
-    code += `let tbTrainLength = tbTrainData.length\n`
-
-    code += `const xs = tf.tensor2d(tbTrainData, [tbTrainLength, tbInputSize])\n`
-    code += `const ys = tf.tensor2d(tbTrainLabels, [tbTrainLength, tbInputSize])\n`
-
     let epochs = block.getFieldValue('EPOCHS')
-    code += `model.fit(xs, ys, {epochs: ` + epochs.toString() + `}).then(() => {\n`
-    code += `alert('Training finished!')\n`
-    code += `})\n`
-    code += `return model\n`
-    code += `}\n`
 
-    code += `this.model = train(tbModel)\n`
+    let code = `
+      let tbTrainData = this.trainData
+      let tbTrainLabels = this.trainLabels
+      
+      var train = function (model) {
+        let tbTrainLength = tbTrainData.length
+
+        const xs = tf.tensor2d(tbTrainData, [tbTrainLength, tbInputSize])
+        const ys = tf.tensor2d(tbTrainLabels, [tbTrainLength, tbInputSize])
+
+        model.fit(xs, ys, {epochs: ${epochs}}).then(() => {
+          alert('Training finished!')
+        })
+
+        return model
+      }
+
+      this.model = train(tbModel)
+    `
+
     return code
   }
 }
