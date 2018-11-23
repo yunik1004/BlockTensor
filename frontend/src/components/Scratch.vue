@@ -11,15 +11,15 @@
       <div  class="col-sm-4">
         <div>
           <p>Training data가 들어갈 자리</p>
-          <p>train data: {{trainData}}</p>
-          <p>train labels: {{trainLabels}}</p>
+          <p>train data: {{stage.trainData}}</p>
+          <p>train labels: {{stage.trainLabels}}</p>
         </div>
       </div>
       <div class="col-sm-8">
         <div id="blocklyDiv" style="width: 800px; height: 480px;"></div>
         <xml id="toolbox" style="display: none">
           <category name="ML" colour="120">
-            <block-component v-for="type in mlBlocks" :type="type" :key="type"></block-component>
+            <block-component v-for="block in stage.blocks" :block="block" :type="block.blockName" :key="block.blockName"></block-component>
           </category>
         </xml>
       </div>
@@ -34,19 +34,34 @@
 
 <script>
 import Blockly from 'node-blockly/browser'
+import JSONfn from 'json-fn'
+import gql from 'graphql-tag'
+
 import BlockDB from '../database/BlockDB'
 
+let workspace
+
 let blockComponent = {
-  props: ['type'],
-  template: '<block :type="type"></block>',
+  props: ['type', 'block'],
+  template: `<block :type="type"></block>`,
   mounted: function () {
+    let blockStruct = BlockDB[this.type]['struct']
+    let blockCode = this.block.code
+    let blockFunc = function (block) {
+      let fn = JSONfn.parse(blockCode)
+      return fn(block, Blockly)
+    }
+
     Blockly.Blocks[this.type] = {
       init: function () {
-        this.jsonInit(BlockDB[this.type]['struct'])
+        this.jsonInit(blockStruct)
       }
     }
 
-    Blockly.JavaScript[this.type] = BlockDB[this.type]['code']
+    Blockly.JavaScript[this.type] = blockFunc
+
+    // Update the toolbox
+    workspace.updateToolbox(document.getElementById('toolbox'))
   }
 }
 
@@ -54,32 +69,40 @@ export default {
   name: 'Scratch',
   data () {
     return {
-      workspace: null,
-      mlBlocks: [],
       model: null,
-      trainData: [],
-      trainLabels: [],
       testData: [],
-      testLabels: []
+      testLabels: [],
+
+      stage: {
+        'blocks': [],
+        'trainData': [],
+        'trainLabels': []
+      },
+      loading: 0
+    }
+  },
+  apollo: {
+    stage: {
+      query: gql`query{
+        stage (stageName: "1") {
+          blocks {
+            blockName
+            struct
+            code
+          }
+          trainData
+          trainLabels
+        }
+      }`,
+      loadingKey: 'loading'
     }
   },
   created () {
-    let modules = ['sequentialModel', 'denseLayer', 'activationLayer', 'train']
-    let traindata = [1, 2, 3, 4, 5]
-    let trainlabels = [1, 3, 5, 7, 9]
     let testdata = [5, 7]
-
-    // eslint-disable-next-line
-    this.mlBlocks.push.apply(this.mlBlocks, modules)
-    // eslint-disable-next-line
-    this.trainData.push.apply(this.trainData, traindata)
-    // eslint-disable-next-line
-    this.trainLabels.push.apply(this.trainLabels, trainlabels)
-    // eslint-disable-next-line
     this.testData.push.apply(this.testData, testdata)
   },
   mounted () {
-    this.workspace = Blockly.inject('blocklyDiv', {
+    workspace = Blockly.inject('blocklyDiv', {
       toolbox: document.getElementById('toolbox'),
       scrollbars: false
     })
@@ -89,7 +112,7 @@ export default {
   },
   methods: {
     runCode: function () {
-      let code = Blockly.JavaScript.workspaceToCode(this.workspace)
+      let code = Blockly.JavaScript.workspaceToCode(workspace)
       try {
         // eslint-disable-next-line
         eval(code)
@@ -98,12 +121,12 @@ export default {
       }
     },
     showCode: function () {
-      let code = Blockly.JavaScript.workspaceToCode(this.workspace)
+      let code = Blockly.JavaScript.workspaceToCode(workspace)
       alert(code)
     },
     testCode: function () {
       // eslint-disable-next-line
-      this.testLabels = this.model.predict(tf.tensor2d(this.testData, [this.testData.length, 1])).dataSync()
+      this.testLabels = this.model.predict(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
     }
   }
 }

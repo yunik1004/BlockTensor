@@ -22,12 +22,14 @@
     "fullpage-vue": "^1.8.1",
     "graphql": "^14.0.2",
     "jquery": "^3.3.1",
+    "json-fn": "^1.1.1",
     "node-blockly": "git://github.com:yunik1004/node-blockly.git#master",
     "popper.js": "^1.14.4",
     "vue": "^2.5.2",
     "vue-apollo": "^3.0.0-beta.26",
     "vue-axios": "^2.1.4",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
