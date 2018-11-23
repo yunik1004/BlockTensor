@@ -37,16 +37,16 @@ import Blockly from 'node-blockly/browser'
 import JSONfn from 'json-fn'
 import gql from 'graphql-tag'
 
-import BlockDB from '../database/BlockDB'
-
+// Blockly workspace
 let workspace
 
 let blockComponent = {
   props: ['type', 'block'],
   template: `<block :type="type"></block>`,
   mounted: function () {
-    let blockStruct = BlockDB[this.type]['struct']
+    let blockStruct = this.block.struct
     let blockCode = this.block.code
+
     let blockFunc = function (block) {
       let fn = JSONfn.parse(blockCode)
       return fn(block, Blockly)
