@@ -64,6 +64,7 @@ BlockDB['sequentialModel'] = {
         ]
       }
     ],
+    'previousStatement': null,
     'nextStatement': null,
     'colour': 230,
     'tooltip': 'Define a model'

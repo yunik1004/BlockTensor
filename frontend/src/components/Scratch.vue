@@ -2,9 +2,12 @@
   <div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+          <p>Test data: {{testData}}</p>
+          <p>Expected output: {{testLabels}}</p>
+        </div>
+        <div class="col-sm-8">
           <p>Result가 보여질 자리</p>
-          <p>Test data: {{testData}} => Expected output: {{testLabels}}</p>
           <p>Interactive</p>
         </div>
       </div>
@@ -25,14 +28,21 @@
       </div>
     </div>
 
+    <!-- Blockly workspace  -->
     <div id="blocklyDiv" style="position: absolute"></div>
     <xml id="toolbox" style="display: none">
-      <category name="- Categories -"></category>
+      <category name="- Modules -"></category>
+      <category></category>
       <category-component
         v-for="blockList in stage.blockLists" :key="blockList.category"
         :name="blockList.category"
         :blockList="blockList.blocks">
       </category-component>
+    </xml>
+
+    <!-- Start blocks  -->
+    <xml id="startBlocks" style="display: none">
+      <block type="startBlock" deletable="false" x="200" y="50"></block>
     </xml>
   </div>
 </template>
@@ -87,7 +97,7 @@ let categoryComponent = {
     }
   },
   template: `
-    <category :name="name" colour="120">
+    <category :name="name" colour="188">
       <block-component
         v-for="block in blockList" :key="block.blockName"
         :type="block.blockName"
@@ -158,11 +168,15 @@ export default {
       scrollbars: false
     })
 
+    this.initializeStartBlocks()
+
     window.addEventListener('resize', this.onResize, false)
     this.onResize()
   },
+  updated () {
+    this.onResize()
+  },
   components: {
-    'block-component': blockComponent,
     'category-component': categoryComponent
   },
   methods: {
@@ -182,6 +196,26 @@ export default {
     testCode: function () {
       // eslint-disable-next-line
       this.testLabels = this.model.predict(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
+    },
+    initializeStartBlocks: function () {
+      Blockly.defineBlocksWithJsonArray([{
+        'type': 'startBlock',
+        'message0': 'Build model here!',
+        'nextStatement': null,
+        'colour': '188',
+        'tooltip': 'Build model here!!'
+      }])
+
+      Blockly.JavaScript['startBlock'] = function (block) {
+        return ``
+      }
+
+      Blockly.BlockSvg.START_HAT = true
+
+      Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace)
+
+      workspace.clearUndo()
+      workspace.addChangeListener(Blockly.Events.disableOrphans)
     },
     onResize: function (e) {
       let blocklyArea = document.getElementById('blocklyArea')
