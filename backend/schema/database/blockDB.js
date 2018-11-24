@@ -1,6 +1,7 @@
 let BlockDB = {}
 
 BlockDB['sequentialModel'] = {
+  'category': 'Model',
   'struct': {
     'type': 'controls_repeat_ext',
     'message0': 'Make a model - input size: %1, output size: %2',
@@ -108,6 +109,7 @@ BlockDB['sequentialModel'] = {
 
 // tf.layers.dense({units: @@@, inputShape: [@@@]}); tb_output_size = @@@\n
 BlockDB['denseLayer'] = {
+  'category': 'Layer',
   'struct': {
     'message0': 'Dense layer with %1 unit',
     'args0': [
@@ -132,6 +134,7 @@ BlockDB['denseLayer'] = {
 }
 
 BlockDB['activationLayer'] = {
+  'category': 'Layer',
   'struct': {
     'message0': 'Activation layer %1',
     'args0': [
@@ -162,6 +165,7 @@ BlockDB['activationLayer'] = {
 }
 
 BlockDB['train'] = {
+  'category': 'Train',
   'struct': {
     'message0': 'Train the model with %1 epochs',
     'args0': [

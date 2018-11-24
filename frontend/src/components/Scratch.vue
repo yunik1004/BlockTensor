@@ -21,14 +21,14 @@
           <p>train data: {{stage.trainData}}</p>
           <p>train labels: {{stage.trainLabels}}</p>
         </div>
-        <div class="col-sm-8" id="blocklyArea">
-        </div>
+        <div class="col-sm-8" id="blocklyArea"></div>
       </div>
     </div>
+
     <div id="blocklyDiv" style="position: absolute"></div>
-    <xml id="toolbox" style="display: none">
-      <category name="ML" colour="120">
-        <block-component v-for="block in stage.blocks" :block="block" :type="block.blockName" :key="block.blockName"></block-component>
+    <xml id="toolbox" ref="toolbox" style="display: none">
+      <category name="Model" colour="120">
+        <block-component v-for="block in stage.blocks" :type="block.blockName" :block="block" :key="block.blockName"></block-component>
       </category>
     </xml>
   </div>
@@ -43,8 +43,8 @@ import gql from 'graphql-tag'
 let workspace
 
 let blockComponent = {
-  props: ['type', 'block'],
-  template: `<block :type="type"></block>`,
+  props: ['block'],
+  template: `<block></block>`,
   mounted: function () {
     let blockStruct = this.block.struct
     let blockCode = this.block.code
@@ -54,13 +54,13 @@ let blockComponent = {
       return fn(block, Blockly)
     }
 
-    Blockly.Blocks[this.type] = {
+    Blockly.Blocks[this.block.blockName] = {
       init: function () {
         this.jsonInit(blockStruct)
       }
     }
 
-    Blockly.JavaScript[this.type] = blockFunc
+    Blockly.JavaScript[this.block.blockName] = blockFunc
 
     // Update the toolbox
     workspace.updateToolbox(document.getElementById('toolbox'))
@@ -76,7 +76,6 @@ export default {
         'trainData': [],
         'trainLabels': []
       },
-      loading: 0,
 
       model: null,
 
@@ -86,10 +85,12 @@ export default {
   },
   apollo: {
     stage: {
-      query: gql`query{
-        stage (stageName: "1") {
+      query: gql`
+      query StageMessage ($stageName: String!) {
+        stage (stageName: $stageName) {
           blocks {
             blockName
+            category
             struct
             code
           }
@@ -97,7 +98,14 @@ export default {
           trainLabels
         }
       }`,
-      loadingKey: 'loading'
+      variables () {
+        return {
+          stageName: '1'
+        }
+      },
+      result (data) {
+        console.log(data)
+      }
     }
   },
   created () {

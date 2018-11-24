@@ -13,7 +13,14 @@ const { typeDefs, resolvers } = require('./schema/graphql')
 var app = express()
 
 // Graphql
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  formatError: error => {
+    console.log(error)
+    return error
+  }
+})
 server.applyMiddleware({ app })
 
 // view engine setup

@@ -11,6 +11,7 @@ const typeDefs = gql`
 
   type Block {
     blockName: String!
+    category: String!
     struct: JSON
     code: String
   }
@@ -71,6 +72,7 @@ function JSONBlock (blockName) {
 
   let blockJSON = {
     'blockName': blockName,
+    'category': block['category'],
     'struct': block['struct'],
     'code': JSONfn.stringify(block['code'])
   }
