@@ -12,13 +12,18 @@ const typeDefs = gql`
   type Block {
     blockName: String!
     category: String!
-    struct: JSON
-    code: String
+    struct: JSON!
+    code: String!
+  }
+
+  type BlockList {
+    category: String!
+    blocks: [Block!]!
   }
 
   type Stage {
     stageName: String!
-    blocks: [Block]!
+    blockLists: [BlockList]!
     trainData: [Int]!
     trainLabels: [Int]!
   }
@@ -42,21 +47,44 @@ const resolvers = {
         return null
       }
 
-      let blocks = []
+      let blockListsWithCategory = {}
 
-      let blockList = stage['blocks']
+      let blockList = stage['blocks'].map(function (bn) {
+        return JSONBlock(bn)
+      }).filter(function (b) {
+        return b != null
+      })
+
+      // Initialize lists
       for (let i in blockList) {
-        let block = JSONBlock(blockList[i])
+        let categoryName = blockList[i]['category']
+        blockListsWithCategory[categoryName] = []
+      }
+
+      // Append to lists
+      for (let i in blockList) {
+        let block = blockList[i]
         if (block !== null) {
-          blocks.push(block)
+          let categoryName = block['category']
+          blockListsWithCategory[categoryName].push(block)
         }
+      }
+
+      // Convert array into list
+      let blockLists = []
+      for (let cat in blockListsWithCategory) {
+        blockLists.push({
+          'category': cat,
+          'blocks': blockListsWithCategory[cat]
+        })
       }
 
       let trainData = stage['trainData']
       let trainLabels = stage['trainLabels']
 
       return {
-        'blocks': blocks,
+        'stageName': stageName,
+        'blockLists': blockLists,
         'trainData': trainData,
         'trainLabels': trainLabels
       }

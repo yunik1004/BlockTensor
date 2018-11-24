@@ -26,10 +26,13 @@
     </div>
 
     <div id="blocklyDiv" style="position: absolute"></div>
-    <xml id="toolbox" ref="toolbox" style="display: none">
-      <category name="Model" colour="120">
-        <block-component v-for="block in stage.blocks" :type="block.blockName" :block="block" :key="block.blockName"></block-component>
-      </category>
+    <xml id="toolbox" style="display: none">
+      <category name="- Categories -"></category>
+      <category-component
+        v-for="blockList in stage.blockLists" :key="blockList.category"
+        :name="blockList.category"
+        :blockList="blockList.blocks">
+      </category-component>
     </xml>
   </div>
 </template>
@@ -43,7 +46,12 @@ import gql from 'graphql-tag'
 let workspace
 
 let blockComponent = {
-  props: ['block'],
+  props: {
+    block: {
+      type: Object,
+      required: true
+    }
+  },
   template: `<block></block>`,
   mounted: function () {
     let blockStruct = this.block.struct
@@ -67,12 +75,41 @@ let blockComponent = {
   }
 }
 
+let categoryComponent = {
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    blockList: {
+      type: Array,
+      required: true
+    }
+  },
+  template: `
+    <category :name="name" colour="120">
+      <block-component
+        v-for="block in blockList" :key="block.blockName"
+        :type="block.blockName"
+        :block="block">
+      </block-component>
+    </category>
+  `,
+  mounted: function () {
+    // Update the toolbox
+    workspace.updateToolbox(document.getElementById('toolbox'))
+  },
+  components: {
+    'block-component': blockComponent
+  }
+}
+
 export default {
   name: 'Scratch',
   data () {
     return {
       stage: {
-        'blocks': [],
+        'blockLists': [],
         'trainData': [],
         'trainLabels': []
       },
@@ -88,11 +125,13 @@ export default {
       query: gql`
       query StageMessage ($stageName: String!) {
         stage (stageName: $stageName) {
-          blocks {
-            blockName
+          blockLists {
             category
-            struct
-            code
+            blocks {
+              blockName
+              struct
+              code
+            }
           }
           trainData
           trainLabels
@@ -104,7 +143,7 @@ export default {
         }
       },
       result (data) {
-        console.log(data)
+        // console.log(data)
       }
     }
   },
@@ -113,8 +152,9 @@ export default {
     this.testData.push.apply(this.testData, testdata)
   },
   mounted () {
+    let toolbox = document.getElementById('toolbox')
     workspace = Blockly.inject('blocklyDiv', {
-      toolbox: document.getElementById('toolbox'),
+      toolbox: toolbox,
       scrollbars: false
     })
 
@@ -122,7 +162,8 @@ export default {
     this.onResize()
   },
   components: {
-    'block-component': blockComponent
+    'block-component': blockComponent,
+    'category-component': categoryComponent
   },
   methods: {
     runCode: function () {
