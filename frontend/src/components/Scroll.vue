@@ -1,9 +1,9 @@
 <template>
   <div class="fullpage-container">
     <div class="btn-group-vertical">
-      <button type="button" :class="{ active:index == 0 }" @click="moveTo(0)">first</button>
-      <button type="button" :class="{ active:index == 1 }" @click="moveTo(1)">second</button>
-      <button type="button" :class="{ active:index == 2 }" @click="moveTo(2)">third</button>
+      <button type="button" v-bind:class="{ active:index == 0 }" @click="moveTo(0)"></button>
+      <button type="button" v-bind:class="{ active:index == 1 }" @click="moveTo(1)"></button>
+      <button type="button" v-bind:class="{ active:index == 2 }" @click="moveTo(2)"></button>
     </div>
     <div class="fullpage-wp" v-fullpage="opts" ref="fullpage">
       <div class="page-1 page">
@@ -13,7 +13,7 @@
         </div>
         <h1 class="part-1" v-animate="{value: 'bounceInLeft'}">BlockTensor</h1>
         <h3 class="part-1" v-animate="{value: 'bounceInLeft', delay: 300}">context</h3>
-        <b-button type="button" class="button-Main" to="Select" v-animate="{value: 'bounceInRight', delay: 600}">Start</b-button>
+        <b-button type="button" class="button-Main" to="Template" v-animate="{value: 'bounceInRight', delay: 600}">Start</b-button>
       </div>
       <div class="page-2 page">
         <h1 class="part-2" v-animate="{value: 'bounceInLeft'}">Second page</h1>
@@ -28,10 +28,10 @@
 <script>
 export default {
   name: 'Scroll',
-  pageNum: 0,
-  index: 0,
   data () {
+    var that = this
     return {
+      index: 0,
       opts: {
         start: 0,
         dir: 'v',
@@ -39,10 +39,10 @@ export default {
         duration: 300,
         beforeChange: function (ele, current, next) {
           console.log('before', current, next)
-          this.index = next
+          that.index = next
         },
         afterChange: function (ele, current) {
-          this.index = current
+          that.index = current
           console.log('after', current)
         }
       }
@@ -51,9 +51,7 @@ export default {
   methods: {
     moveTo: function (index) {
       this.$refs.fullpage.$fullpage.moveTo(index, true)
-    },
-    showPage: function () {
-      this.pageNum++
+      this.index = index
       this.$refs.fullpage.$fullpage.$update()
     }
   }
@@ -71,7 +69,7 @@ export default {
 
 .page {
   display: block;
-  text_align: center;
+  text-align: center;
   font-size: 26px;
   color: #eee;
 }
@@ -93,25 +91,25 @@ export default {
 
 .btn-group-vertical {
   position: absolute;
-  top: 30px;
+  top: 30%;
   left: 30px;
   z-index: 9;
 }
 
 .btn-group-vertical button {
   display: inline-block;
-  margin: 10px;
+  margin: 30px;
   color: #000;
   background: #fff;
   background: rgba(255, 255, 255, .5);
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  padding: 9px 18px;
+  padding: 9px 9px;
   border: none;
   outline: none;
 }
 
-.btn-group-vertical button:active {
+.btn-group-vertical button.active {
   background: rgba(0, 0, 0, .5);
   color: #fff;
 }
