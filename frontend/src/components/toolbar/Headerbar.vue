@@ -1,7 +1,7 @@
 <template>
-  <p>
-    <router-link :to="{name: 'Main'}">TENSOR BLOCK</router-link>
-  </p>
+  <b-navbar toggleable="md" type="dark" variant="info">
+    <b-navbar-brand :to="{name: 'Main'}">TENSOR BLOCK</b-navbar-brand>
+  </b-navbar>
 </template>
 
 <script>

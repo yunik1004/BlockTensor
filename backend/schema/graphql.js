@@ -1,26 +1,36 @@
 const { gql } = require('apollo-server-express')
 const GraphQLJSON = require('graphql-type-json')
-const blockDB = require('./database/blockDB')
-const stageDB = require('./database/stageDB')
+const JSONfn = require('json-fn')
+
+const BlockDB = require('./database/BlockDB')
+const StageDB = require('./database/StageDB')
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
   scalar JSON
 
   type Block {
-    blockID: Int!
-    struct: JSON
-    code: String
+    blockName: String!
+    category: String!
+    struct: JSON!
+    code: String!
+  }
+
+  type BlockList {
+    category: String!
+    blocks: [Block!]!
   }
 
   type Stage {
-    stageID: Int!
-    blocks: [Block]!
+    stageName: String!
+    blockLists: [BlockList]!
+    trainData: [Int]!
+    trainLabels: [Int]!
   }
 
   type Query {
-    block (blockID: Int!): Block
-    stage (stageID: Int!): Stage
+    block (blockName: String!): Block
+    stage (stageName: String!): Stage
   }
 `
 
@@ -28,38 +38,74 @@ const typeDefs = gql`
 const resolvers = {
   JSON: GraphQLJSON,
   Query: {
-    block: (root, { blockID }) => {
-      const block = getDataByValue(blockDB, 'blockID', blockID)
-      if (block === undefined) {
-        return null
-      }
-
-      return block
+    block: (root, { blockName }) => {
+      return JSONBlock(blockName)
     },
-    stage: (root, { stageID }) => {
-      const stage = getDataByValue(stageDB, 'stageID', stageID)
+    stage: (root, { stageName }) => {
+      const stage = StageDB[stageName]
       if (stage === undefined) {
         return null
       }
 
-      let blocks = []
+      let blockListsWithCategory = {}
 
-      for (let i in stage.blocks) {
-        let block = getDataByValue(blockDB, 'blockID', stage.blocks[i])
-        if (block != undefined) {
-          blocks.push(block)
+      let blockList = stage['blocks'].map(function (bn) {
+        return JSONBlock(bn)
+      }).filter(function (b) {
+        return b != null
+      })
+
+      // Initialize lists
+      for (let i in blockList) {
+        let categoryName = blockList[i]['category']
+        blockListsWithCategory[categoryName] = []
+      }
+
+      // Append to lists
+      for (let i in blockList) {
+        let block = blockList[i]
+        if (block !== null) {
+          let categoryName = block['category']
+          blockListsWithCategory[categoryName].push(block)
         }
       }
 
+      // Convert array into list
+      let blockLists = []
+      for (let cat in blockListsWithCategory) {
+        blockLists.push({
+          'category': cat,
+          'blocks': blockListsWithCategory[cat]
+        })
+      }
+
+      let trainData = stage['trainData']
+      let trainLabels = stage['trainLabels']
+
       return {
-        'blocks': blocks
+        'stageName': stageName,
+        'blockLists': blockLists,
+        'trainData': trainData,
+        'trainLabels': trainLabels
       }
     }
   }
 }
 
-function getDataByValue (db, key, value) {
-  return db.find(function (element) { return element[key] === value })
+function JSONBlock (blockName) {
+  const block = BlockDB[blockName]
+  if (block === undefined) {
+    return null
+  }
+
+  let blockJSON = {
+    'blockName': blockName,
+    'category': block['category'],
+    'struct': block['struct'],
+    'code': JSONfn.stringify(block['code'])
+  }
+
+  return blockJSON
 }
 
 module.exports = { typeDefs, resolvers }

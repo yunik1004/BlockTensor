@@ -1,6 +1,5 @@
 <template>
   <div>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js" type="application/javascript"></script>
     <Headerbar/>
     <div id="app">
       <router-view/>

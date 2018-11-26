@@ -1,9 +1,9 @@
-const stageDB =
-[
-  {
-    'stageID': 1,
-    'blocks': [1, 2]
-  }
-]
+let StageDB = {}
 
-module.exports = stageDB
+StageDB['1'] = {
+  'blocks': ['sequentialModel', 'denseLayer', 'activationLayer', 'train'],
+  'trainData': [1, 2, 3, 4, 5],
+  'trainLabels': [1, 3, 5, 7, 9]
+}
+
+module.exports = StageDB
