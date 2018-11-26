@@ -9,6 +9,7 @@ import ApolloClient from 'apollo-boost'
 import VueApollo from 'vue-apollo'
 import VueFullpage from 'fullpage-vue'
 import BootstrapVue from 'bootstrap-vue'
+import VueSwal from 'vue-swal'
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import 'expose-loader?$!expose-loader?jQuery!jquery'
 import 'bootstrap'
@@ -21,6 +22,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueFullpage)
 Vue.use(BootstrapVue)
+Vue.use(VueSwal)
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
