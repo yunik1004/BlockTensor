@@ -4,16 +4,11 @@ BlockDB['sequentialModel'] = {
   'category': 'Model',
   'struct': {
     'type': 'controls_repeat_ext',
-    'message0': 'Make a model - input size: %1, output size: %2',
+    'message0': 'Make a model - batch size: %1',
     'args0': [
       {
         'type': 'field_number',
-        'name': 'INPUT_SIZE',
-        'value': 1
-      },
-      {
-        'type': 'field_number',
-        'name': 'OUTPUT_SIZE',
+        'name': 'BATCH_SIZE',
         'value': 1
       }
     ],
@@ -24,22 +19,8 @@ BlockDB['sequentialModel'] = {
         'name': 'LAYERS'
       }
     ],
-    'message2': 'Output layer activation %1',
+    'message2': 'Loss function %1',
     'args2': [
-      {
-        'type': 'field_dropdown',
-        'name': 'ACTIVATION_OUTPUT',
-        'options': [
-          ['linear', `'linear'`],
-          ['relu', `'relu'`],
-          ['sigmoid', `'sigmoid'`],
-          ['softmax', `'softmax'`],
-          ['tanh', `'tanh'`]
-        ]
-      }
-    ],
-    'message3': 'Loss function %1',
-    'args3': [
       {
         'type': 'field_dropdown',
         'name': 'LOSS',
@@ -50,8 +31,8 @@ BlockDB['sequentialModel'] = {
         ]
       }
     ],
-    'message4': 'Optimizer %1',
-    'args4': [
+    'message3': 'Optimizer %1',
+    'args3': [
       {
         'type': 'field_dropdown',
         'name': 'OPTIMIZER',
@@ -70,16 +51,16 @@ BlockDB['sequentialModel'] = {
     'tooltip': 'Define a model'
   },
   'code': function (block, Blockly) {
-    let inputSize = block.getFieldValue('INPUT_SIZE')
-
     let code = `
-      var generateSequentialModel = function () {
+      this.model = null
+
+      tbModel = function (trainData, trainLabels) {
         const model = tf.sequential()
-        let tb_output_size = ${inputSize}
+        let tb_output_size = trainData.shape.slice(1)
     `
 
     let layers = Blockly.JavaScript.statementToCode(block, 'LAYERS').split('\n').filter(function (entry) { return /\S/.test(entry) })
-    for (let i = 0; i < layers.length - 1; i++) {
+    for (let i = 0; i < layers.length; i++) {
       let statements = layers[i].split(';')
       code += `
         model.add(${statements[0]})
@@ -87,28 +68,27 @@ BlockDB['sequentialModel'] = {
       `
     }
 
-    let outputSize = block.getFieldValue('OUTPUT_SIZE')
-    let outputActivation = block.getFieldValue('ACTIVATION_OUTPUT')
     let loss = block.getFieldValue('LOSS')
     let opt = block.getFieldValue('OPTIMIZER')
 
     code += `
-        model.add(tf.layers.dense({units: ${outputSize}, inputShape: [tb_output_size]}))
-        model.add(tf.layers.activation({activation: ${outputActivation}}))
+        let tb_labels_output_size = trainLabels.shape.slice(1)
+        if (!arraysEqual(tb_output_size, tb_labels_output_size)) {
+          alert('Output size should be the size of ' + tb_labels_output_size)
+          return null
+        }
+
         model.compile({loss: ${loss}, optimizer: ${opt}})
 
         return model
-      }
-
-      let tbModel = generateSequentialModel()
-      let tbInputSize = ${inputSize}
+      }(this.trainData, this.trainLabels)
     `
 
     return code
   }
 }
 
-// tf.layers.dense({units: @@@, inputShape: [@@@]}); tb_output_size = @@@\n
+// tf.layers.dense({units: @@@, inputShape: @@@}); tb_output_size = @@@\n
 BlockDB['denseLayer'] = {
   'category': 'Layer',
   'struct': {
@@ -128,7 +108,7 @@ BlockDB['denseLayer'] = {
   'code': function (block, Blockly) {
     let units = block.getFieldValue('UNITS')
     let code = `
-      tf.layers.dense({units: ${units}, inputShape: [tb_output_size]}); tb_output_size = ${units}
+      tf.layers.dense({units: ${units}, inputShape: tb_output_size}); tb_output_size = [${units}]
     `
     return code
   }
@@ -184,23 +164,23 @@ BlockDB['train'] = {
     let epochs = block.getFieldValue('EPOCHS')
 
     let code = `
-      let tbTrainData = this.stage.trainData
-      let tbTrainLabels = this.stage.trainLabels
+      tbTrainData = this.trainData
+      tbTrainLabels = this.trainLabels
 
-      var train = function (model) {
-        let tbTrainLength = tbTrainData.length
+      this.model = function (model, trainData, trainLabels) {
+        if (!model) {
+          return null
+        }
 
-        const xs = tf.tensor2d(tbTrainData, [tbTrainLength, tbInputSize])
-        const ys = tf.tensor2d(tbTrainLabels, [tbTrainLength, tbInputSize])
+        const xs = tbTrainData
+        const ys = tbTrainLabels
 
         model.fit(xs, ys, {epochs: ${epochs}}).then(() => {
           alert('Training finished!')
         })
 
         return model
-      }
-
-      this.model = train(tbModel)
+      }(tbModel, tbTrainData, tbTrainLabels)
     `
 
     return code

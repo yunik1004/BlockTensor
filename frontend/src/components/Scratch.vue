@@ -120,11 +120,14 @@ export default {
     return {
       stage: {
         'blockLists': [],
-        'trainData': [],
-        'trainLabels': []
+        'trainData': '',
+        'trainLabels': ''
       },
 
       model: null,
+
+      trainData: null,
+      trainLabels: null,
 
       testData: [],
       testLabels: []
@@ -153,7 +156,10 @@ export default {
         }
       },
       result (data) {
-        // console.log(data)
+        // eslint-disable-next-line
+        this.trainData = eval('(' + this.stage.trainData + ')')
+        // eslint-disable-next-line
+        this.trainLabels = eval('(' + this.stage.trainLabels + ')')
       }
     }
   },
@@ -191,7 +197,7 @@ export default {
     },
     showCode: function () {
       let code = Blockly.JavaScript.workspaceToCode(workspace)
-      alert(code)
+      console.log(code)
     },
     testCode: function () {
       // eslint-disable-next-line
@@ -207,7 +213,26 @@ export default {
       }])
 
       Blockly.JavaScript['startBlock'] = function (block) {
-        return ``
+        // Pre-defined variables
+        let code = `
+          let tbTrainData
+          let tbTrainLabels
+
+          let tbModel
+
+          function arraysEqual(a, b) {
+            if (a === b) return true;
+            if (a == null || b == null) return false;
+            if (a.length != b.length) return false;
+
+            for (let i = 0; i < a.length; ++i) {
+              if (a[i] !== b[i]) return false;
+            }
+            return true;
+          }
+        `
+
+        return code
       }
 
       Blockly.BlockSvg.START_HAT = true
