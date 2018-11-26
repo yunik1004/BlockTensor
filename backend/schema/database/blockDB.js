@@ -4,14 +4,7 @@ BlockDB['sequentialModel'] = {
   'category': 'Model',
   'struct': {
     'type': 'controls_repeat_ext',
-    'message0': 'Make a model - batch size: %1',
-    'args0': [
-      {
-        'type': 'field_number',
-        'name': 'BATCH_SIZE',
-        'value': 1
-      }
-    ],
+    'message0': 'Make a model',
     'message1': 'Layers %1',
     'args1': [
       {
@@ -57,6 +50,7 @@ BlockDB['sequentialModel'] = {
       tbModel = function (trainData, trainLabels) {
         const model = tf.sequential()
         let tb_output_size = trainData.shape.slice(1)
+        tb_output_size.unshift(null)
     `
 
     let layers = Blockly.JavaScript.statementToCode(block, 'LAYERS').split('\n').filter(function (entry) { return /\S/.test(entry) })
@@ -73,7 +67,7 @@ BlockDB['sequentialModel'] = {
 
     code += `
         let tb_labels_output_size = trainLabels.shape.slice(1)
-        if (!arraysEqual(tb_output_size, tb_labels_output_size)) {
+        if (!arraysEqual(tb_output_size.slice(1), tb_labels_output_size)) {
           alert('Output size should be the size of ' + tb_labels_output_size)
           return null
         }
@@ -108,7 +102,7 @@ BlockDB['denseLayer'] = {
   'code': function (block, Blockly) {
     let units = block.getFieldValue('UNITS')
     let code = `
-      tf.layers.dense({units: ${units}, inputShape: tb_output_size}); tb_output_size = [${units}]
+      tf.layers.dense({units: ${units}, batchInputShape: tb_output_size}); tb_output_size = [null, ${units}]
     `
     return code
   }
@@ -148,8 +142,14 @@ BlockDB['activationLayer'] = {
 BlockDB['train'] = {
   'category': 'Train',
   'struct': {
-    'message0': 'Train the model with %1 epochs',
-    'args0': [
+    'message0': 'Train the model with...',
+    'message1': 'batchSize: %1, epochs: %2',
+    'args1': [
+      {
+        'type': 'field_number',
+        'name': 'BATCH_SIZE',
+        'value': 1
+      },
       {
         'type': 'field_number',
         'name': 'EPOCHS',
@@ -161,6 +161,7 @@ BlockDB['train'] = {
     'tooltip': 'Train the model'
   },
   'code': function (block, Blockly) {
+    let batchSize = block.getFieldValue('BATCH_SIZE')
     let epochs = block.getFieldValue('EPOCHS')
 
     let code = `
@@ -175,7 +176,10 @@ BlockDB['train'] = {
         const xs = tbTrainData
         const ys = tbTrainLabels
 
-        model.fit(xs, ys, {epochs: ${epochs}}).then(() => {
+        model.fit(xs, ys, {
+          batchSize: ${batchSize},
+          epochs: ${epochs},
+        }).then(() => {
           alert('Training finished!')
         })
 
