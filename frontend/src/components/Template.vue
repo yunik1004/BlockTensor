@@ -1,29 +1,54 @@
 <template>
-    <div>
-        <h1>Select Stage</h1>
-        <div class="card-carousel-wrapper">
-            <div class="card-carousel--nav__left" @click="moveCarousel(-1)" :disabled="atHeadOfList"></div>
-            <div class="card-carousel">
-                <div class="card-carousel--overflow-container">
-                    <div class="card-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')' }">
-                        <div class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name)">
-                            <img src="https://placehold.it/200x200">
-                            <div class="card-carousel--card--footer">
-                                <p>Item: {{ item.name }}</p>
-                                <p>Tag: {{ item.tag }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-carousel--nav__right" @click="moveCarousel(1)" :disabled="atEndOfList"></div>
-        </div>
+    <div class="app">
+        <Push width="300" @openMenu="openSlide()" @closeMenu="closeSlide()">
+          <a id="Profile" href="#">
+            <img class="sidebar-icon" src="../icons/Profile_white.svg">
+            <span>Profile</span>
+          </a>
+          <a id="About Us" href="#">
+            <img class="sidebar-icon2" src="../icons/information_white.svg">
+            <span>AboutUs</span>
+          </a>
+          <a id="Log Out" href="#">
+            <img class="sidebar-icon" src="../icons/logout_white.svg">
+            <span>LogOut</span>
+          </a>
+        </Push>
+        <main id="page-wrap">
+          <router-link to="/" class="header-name">TensorBlock</router-link>
+          <div class="select-subject">STAGE SELECT</div>
+          <div class="card-carousel-wrapper">
+              <div class="card-carousel--nav__left" @click="moveCarousel(-1)" :disabled="atHeadOfList"></div>
+              <div class="card-carousel">
+                  <div class="card-carousel--overflow-container">
+                      <div class="card-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')' }">
+                          <div id="cards" class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name)">
+                              <img src="https://placehold.it/200x200">
+                              <div class="card-carousel--card--footer">
+                                  <p>Item: {{ item.name }}</p>
+                                  <br/><br/>
+                                  <p>Tag: {{ item.tag }}</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="card-carousel--nav__right" @click="moveCarousel(1)" :disabled="atEndOfList"></div>
+          </div>
+          <div class="select-footer">
+            <div class="select-footer-text">- 2018 FALL SEMESTER</div>
+          </div>
+        </main>
     </div>
 </template>
 
 <script>
+import { Push } from 'vue-burger-menu'
 export default {
   name: 'Template',
+  components: {
+    Push
+  },
   data () {
     return {
       currentOffset: 0,
@@ -68,27 +93,47 @@ export default {
           this.$router.push('Swal')
         }
       })
+    },
+    openSlide () {
+    },
+    closeSlide () {
     }
   },
   mounted () {
-    this.$swal({
-      title: 'HELLO',
-      text: 'information',
-      button: true,
-      closeOnClickOutside: false,
-      closeOnEsc: false
-    })
+    if (this.$store.state.firstRun) {
+      setTimeout(() => {
+        this.$swal({
+          title: 'HELLO',
+          text: 'information',
+          button: true,
+          closeOnClickOutside: false,
+          closeOnEsc: false
+        })
+      }, 500)
+      this.$store.state.firstRun = false
+    }
   }
 }
 </script>
 
 <style>
+.app {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #f0ebe6;
+  font-family: Helvetica Neue, Roboto, Arial;
+}
+
 .card-carousel-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px 0 40px;
+  margin: 100px 0 40px;
   color: #666a73;
+  top: 500px;
 }
 
 .card-carousel {
@@ -107,8 +152,8 @@ export default {
   height: 15px;
   padding: 10px;
   box-sizing: border-box;
-  border-top: 2px solid #42b883;
-  border-right: 2px solid #42b883;
+  border-top: 4px solid #42b883;
+  border-right: 4px solid #42b883;
   cursor: pointer;
   margin: 0 10px;
   transition: transform 150ms linear;
@@ -124,7 +169,7 @@ export default {
 }
 
 .card-carousel--nav__left:active {
-  transform: rotate(-135deg) scale(0.9);
+  transform: rotate(-135deg) scale(0.8);
 }
 
 .card-carousel--nav__right {
@@ -132,13 +177,13 @@ export default {
 }
 
 .card-carousel--nav__right:active {
-  transform: rotate(45deg) scale(0.9);
+  transform: rotate(45deg) scale(0.8);
 }
 
 .card-carousel-cards {
   display: flex;
   transition: transform 150ms ease-out;
-  transform: translatex(0px);
+  transform: translateX(0px);
 }
 
 .card-carousel-cards .card-carousel--card {
@@ -149,6 +194,7 @@ export default {
   border-radius: 4px;
   z-index: 3;
   margin-bottom: 2px;
+  position: relative;
 }
 
 .card-carousel-cards .card-carousel--card:first-child {
@@ -221,5 +267,146 @@ export default {
   border-radius: 2px;
   background: white;
   box-shadow: 0px 0px 0px #004977;
+}
+
+.header-name {
+  position: relative;
+  line-height: 36px;
+  font-size: 36px;
+  font-weight: bolder;
+  letter-spacing: -1px;
+  display: inline-block;
+  top: 18px;
+  right: 600px;
+  color: #31353e;
+  text-decoration: none;
+}
+
+.header-name:hover {
+  text-decoration: none;
+  color: #31353e;
+}
+
+.bm-burger-button {
+  position: fixed;
+  width: 30px;
+  height: 25px;
+  left: 30px;
+  top: 24px;
+  cursor: pointer;
+  transition: 0.2s ease-out;
+}
+
+.bm-burger-button:hover {
+  transform: scale(1.2);
+}
+
+.bm-burger-bars {
+  background-color: #31353e;
+}
+
+.line-style {
+  position: absolute;
+  height: 20%;
+  left: 0;
+  right: 0;
+}
+
+.cross-style {
+  position: absolute;
+  top: 12px;
+  right: 2px;
+  cursor: pointer;
+}
+
+.bm-cross {
+  background: #bdc3c7;
+}
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+  transition: 0.25s ease-out;
+}
+
+.bm-cross-button:hover {
+  transform: scale(1.2);
+}
+
+.bm-menu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: #31353e;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+}
+
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.bm-item-list {
+  color: #b8b7ad;
+  margin-left: 10%;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.bm-item-list > * {
+  display: flex;
+  text-decoration: none;
+  padding: 0.6em;
+  transition: 1.0s ease-out;
+}
+
+.bm-item-list > *:hover {
+  text-decoration: none;
+}
+
+.bm-item-list > * > span {
+  margin-left: 20px;
+  font-weight: 700;
+  color: #f0ebe6;
+  margin-top: 5px;
+}
+
+.bm-item-list > * > span:hover {
+  color: #B2AFAB;
+}
+
+.sidebar-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.sidebar-icon2 {
+  width: 28px;
+  height: 28px;
+}
+
+.swal-modal {
+  font-family: Helvetica Neue, Roboto, Arial;
+}
+
+.select-subject {
+  position: relative;
+  font-size: 40px;
+  line-height: 40px;
+  font-family: Helvetica Neue, Roboto, Arial;
+  font-weight: lighter;
+  top: 75px;
+}
+
+.select-footer-text {
+  position: relative;
+  font-weight: lighter;
+  text-align: right;
+  right: 48px;
+  top: 174px;
 }
 </style>
