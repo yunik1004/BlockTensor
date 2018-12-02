@@ -45,9 +45,7 @@ BlockDB['sequentialModel'] = {
   },
   'code': function (block, Blockly) {
     let code = `
-      this.model = null
-
-      tbModel = function (trainData, trainLabels) {
+      this.model = function (trainData, trainLabels) {
         const model = tf.sequential()
         let tb_output_size = trainData.shape.slice(1)
         tb_output_size.unshift(null)
@@ -143,7 +141,7 @@ BlockDB['train'] = {
   'category': 'Train',
   'struct': {
     'message0': 'Train the model with...',
-    'message1': 'batchSize: %1, epochs: %2',
+    'message1': 'batchSize: %1, epochs: %2, iteration: %3, validationSplit: %4',
     'args1': [
       {
         'type': 'field_number',
@@ -154,6 +152,16 @@ BlockDB['train'] = {
         'type': 'field_number',
         'name': 'EPOCHS',
         'value': 10
+      },
+      {
+        'type': 'field_number',
+        'name': 'ITERATION',
+        'value': 10
+      },
+      {
+        'type': 'field_number',
+        'name': 'VAL_SPLIT',
+        'value': 0.15
       }
     ],
     'previousStatement': null,
@@ -163,28 +171,32 @@ BlockDB['train'] = {
   'code': function (block, Blockly) {
     let batchSize = block.getFieldValue('BATCH_SIZE')
     let epochs = block.getFieldValue('EPOCHS')
+    let iter = block.getFieldValue('ITERATION')
+    let valSplit = block.getFieldValue('VAL_SPLIT')
 
     let code = `
-      tbTrainData = this.trainData
-      tbTrainLabels = this.trainLabels
+      let tbThis = this
+      tbTrainData = tbThis.trainData
+      tbTrainLabels = tbThis.trainLabels
 
-      this.model = function (model, trainData, trainLabels) {
-        if (!model) {
-          return null
+      let train = async function () {
+        for(let i = 0; i < ${iter}; i++) {
+          const history = await tbThis.model.fit(tbTrainData, tbTrainLabels, {
+            batchSize: ${batchSize},
+            epochs: ${epochs},
+            validationSplit: ${valSplit}
+          })
+
+          const loss = history.history.loss[0]
+          const val_loss = history.history.val_loss[0]
+          tbThis.trainResults['loss'].push(loss)
+          tbThis.trainResults['val_loss'].push(val_loss)
         }
+      }
 
-        const xs = tbTrainData
-        const ys = tbTrainLabels
-
-        model.fit(xs, ys, {
-          batchSize: ${batchSize},
-          epochs: ${epochs},
-        }).then(() => {
-          alert('Training finished!')
-        })
-
-        return model
-      }(tbModel, tbTrainData, tbTrainLabels)
+      train().then(() => {
+        alert('Train finished')
+      })
     `
 
     return code

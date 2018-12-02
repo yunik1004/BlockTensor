@@ -129,6 +129,11 @@ export default {
       trainData: null,
       trainLabels: null,
 
+      trainResults: {
+        'loss': [],
+        'val_loss': []
+      },
+
       testData: [],
       testLabels: []
     }
@@ -187,6 +192,9 @@ export default {
   },
   methods: {
     runCode: function () {
+      this.trainResults['loss'] = []
+      this.trainResults['val_loss'] = []
+
       let code = Blockly.JavaScript.workspaceToCode(workspace)
       try {
         // eslint-disable-next-line
@@ -201,7 +209,7 @@ export default {
     },
     testCode: function () {
       // eslint-disable-next-line
-      this.testLabels = this.model.predict(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
+      this.testLabels = this.model.predictOnBatch(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
     },
     initializeStartBlocks: function () {
       Blockly.defineBlocksWithJsonArray([{
