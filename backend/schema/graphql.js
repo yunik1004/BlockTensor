@@ -44,8 +44,8 @@ const resolvers = {
     block: (root, { blockName }) => {
       return JSONBlock(blockName)
     },
-    stage: (root, { stageName }) => {
-      return getStage(stageName)
+    stage: (root, { name }) => {
+      return getStage(name)
     },
     stages: () => {
       let stageList = []

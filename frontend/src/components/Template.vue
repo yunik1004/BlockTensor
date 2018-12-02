@@ -108,7 +108,13 @@ export default {
         dangerMode: true
       }).then((goStage) => {
         if (goStage) {
-          this.$router.push('Swal')
+          this.$router.push({
+            name: 'Scratch',
+            params: {
+              stageName: stageName
+            },
+            props: true
+          })
         }
       })
     },

@@ -14,10 +14,11 @@ export default new Router({
   mode: 'history',
   routes: [
     { path: '/', name: 'Scroll', component: Scroll },
-    { path: '/scratch', name: 'Scratch', component: Scratch },
-    { path: '/select', name: 'Select', component: Select },
-    { path: '/swal', name: 'Swal', component: Swal },
     { path: '/template', name: 'Template', component: Template },
+    { path: '/scratch/:stageName', name: 'Scratch', component: Scratch },
+
+    { path: '/swal', name: 'Swal', component: Swal },
+    { path: '/select', name: 'Select', component: Select },
 
     { path: '*', name: 'NotFound', component: NotFound },
     { path: '/test', name: 'Main', component: Main }

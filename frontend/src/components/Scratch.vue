@@ -116,6 +116,7 @@ let categoryComponent = {
 
 export default {
   name: 'Scratch',
+  props: ['stageName'],
   data () {
     return {
       stage: {
@@ -157,7 +158,7 @@ export default {
       }`,
       variables () {
         return {
-          stageName: '1'
+          stageName: this.$route.params.stageName
         }
       },
       result (data) {
