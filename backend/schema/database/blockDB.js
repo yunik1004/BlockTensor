@@ -66,11 +66,15 @@ BlockDB['sequentialModel'] = {
     code += `
         let tb_labels_output_size = trainLabels.shape.slice(1)
         if (!arraysEqual(tb_output_size.slice(1), tb_labels_output_size)) {
-          alert('Output size should be the size of ' + tb_labels_output_size)
+          tbThis.alertTrainingErr('Output size should be the size of ' + tb_labels_output_size)
           return null
         }
 
-        model.compile({loss: ${loss}, optimizer: ${opt}})
+        model.compile({
+          loss: ${loss},
+          optimizer: ${opt},
+          metrics: ['accuracy']
+        })
 
         return model
       }(this.trainData, this.trainLabels)
@@ -175,7 +179,6 @@ BlockDB['train'] = {
     let valSplit = block.getFieldValue('VAL_SPLIT')
 
     let code = `
-      let tbThis = this
       tbTrainData = tbThis.trainData
       tbTrainLabels = tbThis.trainLabels
 
@@ -194,9 +197,11 @@ BlockDB['train'] = {
         }
       }
 
-      train().then(() => {
-        alert('Train finished')
-      })
+      if (tbThis.model != null) {
+        train().then(() => {
+          tbThis.alertFinTraining()
+        })
+      }
     `
 
     return code
