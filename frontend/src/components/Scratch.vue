@@ -13,13 +13,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
-          <button @click="showCode()">Show code</button>
-          <button @click="runCode()">Run code</button>
-          <button @click="testCode()">Test code</button>
-        </div>
-      </div>
-      <div class="row">
         <div class="col-sm-4">
           <p>Test data: {{testData}}</p>
           <p>Expected output: {{testLabels}}</p>
@@ -44,6 +37,13 @@
     <xml id="startBlocks" style="display: none">
       <block type="startBlock" deletable="false" x="200" y="50"></block>
     </xml>
+
+    <!-- Buttons in front of the Blockly workspace -->
+    <div id="trainBtns" class="btn-group-vertical" style="position: absolute">
+      <button type="button" class="btn btn-outline-primary" @click="runCode()">Train</button>
+      <button type="button" class="btn btn-outline-success" @click="testCode()">Test</button>
+      <button type="button" class="btn btn-outline-danger" @click="showCode()" style="display: none">Code</button>
+    </div>
   </div>
 </template>
 
@@ -262,6 +262,7 @@ export default {
       workspace.addChangeListener(Blockly.Events.disableOrphans)
     },
     onResize: function (e) {
+      // Resize blockly workspace
       let blocklyArea = document.getElementById('blocklyArea')
       let blocklyDiv = document.getElementById('blocklyDiv')
 
@@ -288,10 +289,18 @@ export default {
       }
 
       Blockly.svgResize(workspace)
+
+      // Modify the position of buttons
+      let trainBtns = document.getElementById('trainBtns')
+      trainBtns.style.left = x + blocklyArea.offsetWidth - 100 + 'px'
+      trainBtns.style.top = y + 10 + 'px'
     }
   }
 }
 </script>
 
 <style scoped>
+.btn {
+  margin: 10px auto;
+}
 </style>
