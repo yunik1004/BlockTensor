@@ -3,8 +3,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4">
-          <p>Test data: {{testData}}</p>
-          <p>Expected output: {{testLabels}}</p>
+          <p>Training data가 들어갈 자리</p>
+          <p>train data: {{stage.trainData}}</p>
+          <p>train labels: {{stage.trainLabels}}</p>
         </div>
         <div class="col-sm-8">
           <p>Result가 보여질 자리</p>
@@ -20,9 +21,8 @@
       </div>
       <div class="row">
         <div class="col-sm-4">
-          <p>Training data가 들어갈 자리</p>
-          <p>train data: {{stage.trainData}}</p>
-          <p>train labels: {{stage.trainLabels}}</p>
+          <p>Test data: {{testData}}</p>
+          <p>Expected output: {{testLabels}}</p>
         </div>
         <div class="col-sm-8" id="blocklyArea"></div>
       </div>
@@ -120,7 +120,7 @@ export default {
   data () {
     return {
       stage: {
-        'info': '',
+        'details': '',
         'blockLists': [],
         'trainData': '',
         'trainLabels': ''
@@ -145,7 +145,7 @@ export default {
       query: gql`
       query StageMessage ($stageName: String!) {
         stage (name: $stageName) {
-          info
+          details
           blockLists {
             category
             blocks {
@@ -166,7 +166,7 @@ export default {
       result (data) {
         this.$swal({
           title: this.$route.params.stageName,
-          text: this.stage.info,
+          text: this.stage.details,
           button: true,
           closeOnClickOutside: false,
           closeOnEsc: false

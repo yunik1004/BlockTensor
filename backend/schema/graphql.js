@@ -25,6 +25,7 @@ const typeDefs = gql`
     name: String!
     tag: String!
     info: String!
+    details: String!
     blockLists: [BlockList]!
     trainData: String!
     trainLabels: String!
@@ -123,6 +124,7 @@ function getStage (stageName) {
     'name': stageName,
     'tag': stage['tag'],
     'info': stage['info'],
+    'details': stage['details'],
     'blockLists': blockLists,
     'trainData': trainData,
     'trainLabels': trainLabels

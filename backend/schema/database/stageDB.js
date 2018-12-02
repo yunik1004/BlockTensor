@@ -3,6 +3,7 @@ let StageDB = {}
 StageDB['1'] = {
   'tag': '1',
   'info': 'Stage 1',
+  'details': 'details',
   'blocks': ['sequentialModel', 'denseLayer', 'activationLayer', 'train'],
   'trainData': function () {
     let data = [1, 2, 3, 4, 5]
@@ -21,6 +22,7 @@ StageDB['1'] = {
 StageDB['B'] = {
   'tag': 'B',
   'info': 'Stage B',
+  'details': 'details',
   'blocks': [],
   'trainData': function () {
     let data = [1, 2, 3, 4, 5]
@@ -39,6 +41,7 @@ StageDB['B'] = {
 StageDB['C'] = {
   'tag': 'C',
   'info': 'Stage C',
+  'details': 'details',
   'blocks': [],
   'trainData': function () {
     let data = [1, 2, 3, 4, 5]
@@ -57,6 +60,7 @@ StageDB['C'] = {
 StageDB['D'] = {
   'tag': 'D',
   'info': 'Stage D',
+  'details': 'details',
   'blocks': [],
   'trainData': function () {
     let data = [1, 2, 3, 4, 5]
@@ -75,6 +79,7 @@ StageDB['D'] = {
 StageDB['E'] = {
   'tag': 'E',
   'info': 'Stage E',
+  'details': 'details',
   'blocks': [],
   'trainData': function () {
     let data = [1, 2, 3, 4, 5]
