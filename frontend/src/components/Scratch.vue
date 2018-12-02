@@ -120,6 +120,7 @@ export default {
   data () {
     return {
       stage: {
+        'info': '',
         'blockLists': [],
         'trainData': '',
         'trainLabels': ''
@@ -144,6 +145,7 @@ export default {
       query: gql`
       query StageMessage ($stageName: String!) {
         stage (name: $stageName) {
+          info
           blockLists {
             category
             blocks {
@@ -162,6 +164,14 @@ export default {
         }
       },
       result (data) {
+        this.$swal({
+          title: this.$route.params.stageName,
+          text: this.stage.info,
+          button: true,
+          closeOnClickOutside: false,
+          closeOnEsc: false
+        })
+
         // eslint-disable-next-line
         this.trainData = eval('(' + this.stage.trainData + ')')
         // eslint-disable-next-line
