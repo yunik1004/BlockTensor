@@ -2,8 +2,8 @@ const { gql } = require('apollo-server-express')
 const GraphQLJSON = require('graphql-type-json')
 const JSONfn = require('json-fn')
 
-const BlockDB = require('./database/BlockDB')
-const StageDB = require('./database/StageDB')
+const BlockDB = require('./database/blockDB')
+const StageDB = require('./database/stageDB')
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
