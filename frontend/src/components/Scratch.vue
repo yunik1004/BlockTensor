@@ -142,7 +142,7 @@ export default {
     stage: {
       query: gql`
       query StageMessage ($stageName: String!) {
-        stage (stageName: $stageName) {
+        stage (name: $stageName) {
           blockLists {
             category
             blocks {

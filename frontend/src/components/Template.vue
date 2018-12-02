@@ -22,7 +22,7 @@
               <div class="card-carousel">
                   <div class="card-carousel--overflow-container">
                       <div class="card-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')' }">
-                          <div id="cards" class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name)">
+                          <div id="cards" class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name, item.info)">
                               <img src="https://placehold.it/200x200">
                               <div class="card-carousel--card--footer">
                                   <p>Item: {{ item.name }}</p>
@@ -43,7 +43,9 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 import { Push } from 'vue-burger-menu'
+
 export default {
   name: 'Template',
   components: {
@@ -54,15 +56,31 @@ export default {
       currentOffset: 0,
       windowSize: 3,
       paginationFactor: 220,
-      items: [
-        {name: 'A', tag: 'a'},
-        {name: 'B', tag: 'b'},
-        {name: 'C', tag: 'c'},
-        {name: 'D', tag: 'd'},
-        {name: 'E', tag: 'e'},
-        {name: 'F', tag: 'f'},
-        {name: 'G', tag: 'g'}
-      ]
+      items: [ // Test items
+        {name: 'A', tag: 'a', info: 'hi'},
+        {name: 'B', tag: 'b', info: 'hi'},
+        {name: 'C', tag: 'c', info: 'hi'},
+        {name: 'D', tag: 'd', info: 'hi'},
+        {name: 'E', tag: 'e', info: 'hi'},
+        {name: 'F', tag: 'f', info: 'hi'},
+        {name: 'G', tag: 'g', info: 'hi'}
+      ],
+      stages: []
+    }
+  },
+  apollo: {
+    stages: {
+      query: gql`
+      query GetStages {
+        stages {
+          name
+          tag
+          info
+        }
+      }`,
+      result (data) {
+        this.items = this.stages
+      }
     }
   },
   computed: {
@@ -81,10 +99,10 @@ export default {
         this.currentOffset += this.paginationFactor
       }
     },
-    stageInfo (stageName) {
+    stageInfo (stageName, info) {
       this.$swal({
         title: stageName,
-        text: 'stage info',
+        text: info,
         icon: 'info',
         buttons: ['cancel', 'go'],
         dangerMode: true
