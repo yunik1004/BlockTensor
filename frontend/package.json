@@ -30,6 +30,7 @@
     "vue-apollo": "^3.0.0-beta.26",
     "vue-axios": "^2.1.4",
     "vue-burger-menu": "^1.0.9",
+    "vue-promise-btn": "^1.1.0",
     "vue-router": "^3.0.1",
     "vue-swal": "^1.0.0",
     "vuex": "^3.0.1"
