@@ -1,8 +1,7 @@
 environment:
   npm_version: latest
   matrix:
-    - nodejs_version: "10"
-    - nodejs_version: "11"
+    - nodejs_version: "8"
 
 platform:
   - x86

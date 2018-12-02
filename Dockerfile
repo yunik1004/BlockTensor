@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:8
 LABEL maintainer="inkyuhak@gmail.com"
 
 COPY . /src
