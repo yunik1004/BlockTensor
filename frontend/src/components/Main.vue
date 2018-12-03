@@ -15,11 +15,19 @@
     </p>
     <button type="button" class="btn btn-sm btn-default">Default</button>
     <button type="button" class="btn btn-sm btn-primary">Primary</button>
+    <button v-on:click="wow">API call</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Main'
+  name: 'Main',
+  methods: {
+    wow: function () {
+      this.$http.get('/api/data/train/wow').then((result) => {
+        console.log('finish')
+      })
+    }
+  }
 }
 </script>

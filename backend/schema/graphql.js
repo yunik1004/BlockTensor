@@ -27,8 +27,6 @@ const typeDefs = gql`
     info: String!
     details: String!
     blockLists: [BlockList]!
-    trainData: String!
-    trainLabels: String!
   }
 
   type Query {
@@ -117,17 +115,12 @@ function getStage (stageName) {
     })
   }
 
-  let trainData = stage['trainData']()
-  let trainLabels = stage['trainLabels']()
-
   return {
     'name': stageName,
     'tag': stage['tag'],
     'info': stage['info'],
     'details': stage['details'],
-    'blockLists': blockLists,
-    'trainData': trainData,
-    'trainLabels': trainLabels
+    'blockLists': blockLists
   }
 }
 
