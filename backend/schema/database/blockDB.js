@@ -3,13 +3,14 @@ let BlockDB = {}
 BlockDB['sequentialModel'] = {
   'category': 'Model',
   'struct': {
-    'type': 'controls_repeat_ext',
+    'type': 'Model',
     'message0': 'Make a model',
     'message1': 'Layers %1',
     'args1': [
       {
         'type': 'input_statement',
-        'name': 'LAYERS'
+        'name': 'LAYERS',
+        'check': ['Layer']
       }
     ],
     'message2': 'Loss function %1',
@@ -88,6 +89,7 @@ BlockDB['sequentialModel'] = {
 BlockDB['denseLayer'] = {
   'category': 'Layer',
   'struct': {
+    'type': 'Layer',
     'message0': 'Dense layer with %1 unit',
     'args0': [
       {
@@ -113,6 +115,7 @@ BlockDB['denseLayer'] = {
 BlockDB['activationLayer'] = {
   'category': 'Layer',
   'struct': {
+    'type': 'Layer',
     'message0': 'Activation layer %1',
     'args0': [
       {
@@ -144,6 +147,7 @@ BlockDB['activationLayer'] = {
 BlockDB['train'] = {
   'category': 'Train',
   'struct': {
+    'type': 'Train',
     'message0': 'Train the model with...',
     'message1': 'batchSize: %1, epochs: %2, iteration: %3, validationSplit: %4',
     'args1': [

@@ -16,10 +16,9 @@ export default new Router({
     { path: '/template', name: 'Template', component: Template },
     { path: '/scratch/:stageName', name: 'Scratch', component: Scratch },
 
-    { path: '/swal', name: 'Swal', component: Swal },
-    { path: '/select', name: 'Select', component: Select },
-
     { path: '*', name: 'NotFound', component: NotFound },
-    { path: '/test', name: 'Main', component: Main }
+
+    { path: '/test', name: 'Main', component: Main },
+    { path: '/swal', name: 'Swal', component: Swal }
   ]
 })
