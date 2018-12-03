@@ -29,7 +29,7 @@
                 <span class="css-cancel-button" @click="buttonClose()"></span>
                 <div class="button-Main-expanded-subject">SIGN UP WITH EMAIL</div>
                 <div class="button-Main-expanded-signup">
-                  <input type="text" class="button-Main-expanded-text" v-model="email" placeholder="USERNAME">
+                  <input type="email" class="button-Main-expanded-text" v-model="email" placeholder="USERNAME">
                   <hr class="button-Main-expanded-text-line">
                   <input type="password" class="button-Main-expanded-text" v-model="password" placeholder="PASSWORD">
                   <hr class="button-Main-expanded-text-line">
@@ -77,19 +77,14 @@
       </div>
       <div class="page-3 page">
         <div class="page-3--text-container">
-          <div class="page-3--text-container-top">
-            <div class="page-3--text-container-top-left">
-              TensorBlock can...
-            </div>
-            <div class="page-3--text-container-top-right">
-              Contact Us
-            </div>
-          </div>
-          <div class="page-3--text-container-contents">
-            <div class="page-3--text-box">
-              <img src="../icons/Profile.svg" class="page-3--text-box-icon">
-              <div class="page-3--text-box-text">
-              </div>
+          <div class="page-3--text-container-left"></div>
+          <div class="page-3--text-container-right">
+            <div class="page-3--text-container-right-top">Contact Us</div>
+            <div class="page-3--text-container-right-bottom">
+              <input type="text" class="page-3--text-container-right-bottom-from" v-model="c_name" placeholder="NAME" v-animate="{value: 'fadeIn', delay: 50}">
+              <input type="email" class="page-3--text-container-right-bottom-from" v-model="c_from" placeholder="EMAIL" v-animate="{value: 'fadeIn', delay: 150}">
+              <textarea class="page-3--text-container-right-bottom-text" v-model="c_text" placeholder="Tell us about message" v-animate="{value: 'fadeIn', delay: 250}"></textarea>
+              <div class="page-3--text-container-right-bottom-submit" v-animate="{value: 'fadeIn', delay: 350}">SUBMIT</div>
             </div>
           </div>
         </div>
@@ -498,38 +493,6 @@ vr2 {
   right: 600px;
 }
 
-.page-3--text-container {
-  position: relative;
-  height: auto;
-  margin: 0px auto;
-  top: 25%;
-  font-family: Helvetica Neue, Roboto, Arial;
-  color: #31353e;
-}
-
-.page-3--text-container-top {
-  font-size: 28px;
-  line-height: 28px;
-  position: absolute;
-  bottom: 50px;
-  padding: 0;
-  margin: 0;
-  font-weight: bold;
-}
-
-.page-3--text-container-top-left {
-  position: relative;
-  text-align: right;
-  left: 250px;
-}
-
-.page-3--text-container-top-right {
-  position: relative;
-  left: 1000px;
-  text-align: right;
-  bottom: 28px
-}
-
 .button-Main-expanded-subject {
   position: relative;
   text-align: center;
@@ -667,21 +630,90 @@ vr2 {
   background: #000;
 }
 
-.page-3--text-box {
-  display: inline-block;
+.page-3--text-container {
   position: absolute;
-  border: solid 2px black;
-  width: 200px;
-  height: 100px;
-  border-radius: 15px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Helvetica Neue, Roboto, Arial;
+  color: #31353e;
 }
 
-.page-3--text-box-icon {
+.page-3--text-container-left {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  float: left;
+}
+
+.page-3--text-container-right {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  float: right;
+}
+
+.page-3--text-container-right-top {
+  display: block;
+  position: relative;
+  top: 120px;
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.page-3--text-container-right-bottom {
+  position: relative;
+  top: 130px;
+  height: 60%;
+  width: 80%;
+  display: inline-block;
+  border: none;
+}
+
+.page-3--text-container-right-bottom-from {
   position: relative;
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  top: -15px;
-  left: -50px;
+  width: 85%;
+  height: 10%;
+  border: solid 1px #31353e;
+  top: 15px;
+  padding: 5px;
+  margin-bottom: 10px;
+  background: #FAF5EF;
 }
+
+.page-3--text-container-right-bottom-text {
+  position: relative;
+  display: inline-block;
+  width: 85%;
+  height: 60%;
+  border: solid 1px #31353e;
+  top: 15px;
+  padding: 5px;
+  background: #FAF5EF;
+}
+
+.page-3--text-container-right-bottom-submit {
+  position: relative;
+  display: inline-block;
+  width: 85%;
+  height: 10%;
+  top: 15px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 18px;
+  border: solid 1px black;
+  padding: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #f0ebe6;
+  background: #F5604C;
+  border: none;
+  border-radius: 5px;
+}
+
 </style>

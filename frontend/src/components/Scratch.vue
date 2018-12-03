@@ -11,7 +11,7 @@
           <p>Train loss: {{lastTrainLoss}}</p>
           <p>Validation loss: {{lastValidLoss}}</p>
         </div>
-        <div class="col-sm-8">
+        <div class="classchart">
           <line-chart :chart-data="trainLossCollection"></line-chart>
         </div>
       </div>
@@ -390,5 +390,10 @@ export default {
 <style scoped>
 .btn {
   margin: 10px auto;
+}
+
+.classchart {
+  width: 200px !important;
+  height: 200px !important;
 }
 </style>
