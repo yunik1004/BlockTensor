@@ -37,8 +37,8 @@ const apolloProvider = new VueApollo({
 
 Vue.use(VueApollo)
 
-/* Ignore pre-defined elements in Blockly */
-Vue.config.ignoredElements = ['xml', 'category', 'block', 'value', 'field']
+/* Ignore pre-defined elements in other libraries */
+Vue.config.ignoredElements = ['xml', 'category', 'block', 'value', 'field', 'vr1', 'vr2']
 
 export const store = new Vuex.Store({
   state: {

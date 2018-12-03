@@ -2,8 +2,8 @@ const { gql } = require('apollo-server-express')
 const GraphQLJSON = require('graphql-type-json')
 const JSONfn = require('json-fn')
 
-const BlockDB = require('./database/BlockDB')
-const StageDB = require('./database/StageDB')
+const BlockDB = require('./database/blockDB')
+const StageDB = require('./database/stageDB')
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
@@ -22,15 +22,19 @@ const typeDefs = gql`
   }
 
   type Stage {
-    stageName: String!
+    name: String!
+    tag: String!
+    info: String!
+    details: String!
     blockLists: [BlockList]!
-    trainData: [Int]!
-    trainLabels: [Int]!
+    trainData: String!
+    trainLabels: String!
   }
 
   type Query {
     block (blockName: String!): Block
-    stage (stageName: String!): Stage
+    stage (name: String!): Stage
+    stages: [Stage]!
   }
 `
 
@@ -41,53 +45,20 @@ const resolvers = {
     block: (root, { blockName }) => {
       return JSONBlock(blockName)
     },
-    stage: (root, { stageName }) => {
-      const stage = StageDB[stageName]
-      if (stage === undefined) {
-        return null
-      }
+    stage: (root, { name }) => {
+      return getStage(name)
+    },
+    stages: () => {
+      let stageList = []
 
-      let blockListsWithCategory = {}
-
-      let blockList = stage['blocks'].map(function (bn) {
-        return JSONBlock(bn)
-      }).filter(function (b) {
-        return b != null
-      })
-
-      // Initialize lists
-      for (let i in blockList) {
-        let categoryName = blockList[i]['category']
-        blockListsWithCategory[categoryName] = []
-      }
-
-      // Append to lists
-      for (let i in blockList) {
-        let block = blockList[i]
-        if (block !== null) {
-          let categoryName = block['category']
-          blockListsWithCategory[categoryName].push(block)
+      for (let stageName in StageDB) {
+        let stage = getStage(stageName)
+        if (stage !== null) {
+          stageList.push(stage)
         }
       }
 
-      // Convert array into list
-      let blockLists = []
-      for (let cat in blockListsWithCategory) {
-        blockLists.push({
-          'category': cat,
-          'blocks': blockListsWithCategory[cat]
-        })
-      }
-
-      let trainData = stage['trainData']
-      let trainLabels = stage['trainLabels']
-
-      return {
-        'stageName': stageName,
-        'blockLists': blockLists,
-        'trainData': trainData,
-        'trainLabels': trainLabels
-      }
+      return stageList
     }
   }
 }
@@ -106,6 +77,58 @@ function JSONBlock (blockName) {
   }
 
   return blockJSON
+}
+
+function getStage (stageName) {
+  const stage = StageDB[stageName]
+  if (stage === undefined) {
+    return null
+  }
+
+  let blockListsWithCategory = {}
+
+  let blockList = stage['blocks'].map(function (bn) {
+    return JSONBlock(bn)
+  }).filter(function (b) {
+    return b != null
+  })
+
+  // Initialize lists
+  for (let i in blockList) {
+    let categoryName = blockList[i]['category']
+    blockListsWithCategory[categoryName] = []
+  }
+
+  // Append to lists
+  for (let i in blockList) {
+    let block = blockList[i]
+    if (block !== null) {
+      let categoryName = block['category']
+      blockListsWithCategory[categoryName].push(block)
+    }
+  }
+
+  // Convert array into list
+  let blockLists = []
+  for (let cat in blockListsWithCategory) {
+    blockLists.push({
+      'category': cat,
+      'blocks': blockListsWithCategory[cat]
+    })
+  }
+
+  let trainData = stage['trainData']()
+  let trainLabels = stage['trainLabels']()
+
+  return {
+    'name': stageName,
+    'tag': stage['tag'],
+    'info': stage['info'],
+    'details': stage['details'],
+    'blockLists': blockLists,
+    'trainData': trainData,
+    'trainLabels': trainLabels
+  }
 }
 
 module.exports = { typeDefs, resolvers }

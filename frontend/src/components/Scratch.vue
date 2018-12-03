@@ -3,26 +3,22 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4">
-          <p>Test data: {{testData}}</p>
-          <p>Expected output: {{testLabels}}</p>
+          <p>Training data가 들어갈 자리</p>
+          <p>train data: {{stage.trainData}}</p>
+          <p>train labels: {{stage.trainLabels}}</p>
+
+          <p>Train result</p>
+          <p>Train loss: {{lastTrainLoss}}</p>
+          <p>Validation loss: {{lastValidLoss}}</p>
         </div>
         <div class="col-sm-8">
-          <p>Result가 보여질 자리</p>
-          <p>Interactive</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <button @click="showCode()">Show code</button>
-          <button @click="runCode()">Run code</button>
-          <button @click="testCode()">Test code</button>
+          <line-chart :chart-data="trainLossCollection"></line-chart>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-4">
-          <p>Training data가 들어갈 자리</p>
-          <p>train data: {{stage.trainData}}</p>
-          <p>train labels: {{stage.trainLabels}}</p>
+          <p>Test data: {{testData}}</p>
+          <p>Expected output: {{testLabels}}</p>
         </div>
         <div class="col-sm-8" id="blocklyArea"></div>
       </div>
@@ -44,6 +40,13 @@
     <xml id="startBlocks" style="display: none">
       <block type="startBlock" deletable="false" x="200" y="50"></block>
     </xml>
+
+    <!-- Buttons in front of the Blockly workspace -->
+    <div id="trainBtns" class="btn-group-vertical" style="position: absolute">
+      <button type="button" class="btn btn-outline-primary" @click="runCode()">Train</button>
+      <button type="button" class="btn btn-outline-success" @click="testCode()">Test</button>
+      <button type="button" class="btn btn-outline-danger" @click="showCode()">Code</button>
+    </div>
   </div>
 </template>
 
@@ -51,6 +54,7 @@
 import Blockly from 'node-blockly/browser'
 import JSONfn from 'json-fn'
 import gql from 'graphql-tag'
+import LineChart from './chart/LineChart.js'
 
 // Blockly workspace
 let workspace
@@ -116,25 +120,74 @@ let categoryComponent = {
 
 export default {
   name: 'Scratch',
+  props: ['stageName'],
   data () {
     return {
       stage: {
+        'details': '',
         'blockLists': [],
-        'trainData': [],
-        'trainLabels': []
+        'trainData': '',
+        'trainLabels': ''
       },
 
       model: null,
 
+      trainData: null,
+      trainLabels: null,
+
+      trainResults: {
+        'loss': [],
+        'val_loss': []
+      },
+
       testData: [],
       testLabels: []
+    }
+  },
+  computed: {
+    lastTrainLoss: function () {
+      let len = this.trainResults.loss.length
+      if (len === 0) {
+        return null
+      }
+
+      return this.trainResults.loss[len - 1]
+    },
+    lastValidLoss: function () {
+      let len = this.trainResults.val_loss.length
+      if (len === 0) {
+        return null
+      }
+
+      return this.trainResults.val_loss[len - 1]
+    },
+    trainLossCollection: function () {
+      let lossSize = this.trainResults.loss.length
+      let lossLabels = [...Array(lossSize + 1).keys()].slice(1)
+
+      return {
+        labels: lossLabels,
+        datasets: [
+          {
+            label: 'Loss',
+            fill: false,
+            data: this.trainResults.loss
+          },
+          {
+            label: 'Val Loss',
+            fill: false,
+            data: this.trainResults.val_loss
+          }
+        ]
+      }
     }
   },
   apollo: {
     stage: {
       query: gql`
       query StageMessage ($stageName: String!) {
-        stage (stageName: $stageName) {
+        stage (name: $stageName) {
+          details
           blockLists {
             category
             blocks {
@@ -149,11 +202,22 @@ export default {
       }`,
       variables () {
         return {
-          stageName: '1'
+          stageName: this.$route.params.stageName
         }
       },
       result (data) {
-        // console.log(data)
+        this.$swal({
+          title: this.$route.params.stageName,
+          text: this.stage.details,
+          button: true,
+          closeOnClickOutside: false,
+          closeOnEsc: false
+        })
+
+        // eslint-disable-next-line
+        this.trainData = eval('(' + this.stage.trainData + ')')
+        // eslint-disable-next-line
+        this.trainLabels = eval('(' + this.stage.trainLabels + ')')
       }
     }
   },
@@ -177,25 +241,40 @@ export default {
     this.onResize()
   },
   components: {
-    'category-component': categoryComponent
+    'category-component': categoryComponent,
+    'line-chart': LineChart
   },
   methods: {
     runCode: function () {
+      this.trainResults['loss'] = []
+      this.trainResults['val_loss'] = []
+
       let code = Blockly.JavaScript.workspaceToCode(workspace)
       try {
         // eslint-disable-next-line
         eval(code)
       } catch (e) {
-        alert(e)
+        this.alertTrainingErr(e.message)
       }
     },
     showCode: function () {
       let code = Blockly.JavaScript.workspaceToCode(workspace)
-      alert(code)
+      console.log(code)
     },
     testCode: function () {
+      if (this.model == null) {
+        this.$swal({
+          title: 'No Trained Model exists',
+          text: 'Make model first',
+          icon: 'error',
+          button: true,
+          closeOnClickOutside: false,
+          closeOnEsc: false
+        })
+        return
+      }
       // eslint-disable-next-line
-      this.testLabels = this.model.predict(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
+      this.testLabels = this.model.predictOnBatch(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
     },
     initializeStartBlocks: function () {
       Blockly.defineBlocksWithJsonArray([{
@@ -207,7 +286,27 @@ export default {
       }])
 
       Blockly.JavaScript['startBlock'] = function (block) {
-        return ``
+        // Pre-defined variables
+        let code = `
+          let tbTrainData
+          let tbTrainLabels
+
+          let tbModel
+          let tbThis = this
+
+          function arraysEqual(a, b) {
+            if (a === b) return true;
+            if (a == null || b == null) return false;
+            if (a.length != b.length) return false;
+
+            for (let i = 0; i < a.length; ++i) {
+              if (a[i] !== b[i]) return false;
+            }
+            return true;
+          }
+        `
+
+        return code
       }
 
       Blockly.BlockSvg.START_HAT = true
@@ -218,6 +317,7 @@ export default {
       workspace.addChangeListener(Blockly.Events.disableOrphans)
     },
     onResize: function (e) {
+      // Resize blockly workspace
       let blocklyArea = document.getElementById('blocklyArea')
       let blocklyDiv = document.getElementById('blocklyDiv')
 
@@ -244,10 +344,39 @@ export default {
       }
 
       Blockly.svgResize(workspace)
+
+      // Modify the position of buttons
+      let trainBtns = document.getElementById('trainBtns')
+      trainBtns.style.left = x + blocklyArea.offsetWidth - 100 + 'px'
+      trainBtns.style.top = y + 10 + 'px'
+    },
+    alertFinTraining: function () {
+      let resTxt = `Training loss: ${this.lastTrainLoss}\nValidation loss: ${this.lastValidLoss}`
+      this.$swal({
+        title: 'Training Success!!!',
+        text: resTxt,
+        icon: 'success',
+        button: true,
+        closeOnClickOutside: false,
+        closeOnEsc: false
+      })
+    },
+    alertTrainingErr: function (errMsg) {
+      this.$swal({
+        title: 'Training Fail!!!',
+        text: errMsg,
+        icon: 'error',
+        button: true,
+        closeOnClickOutside: false,
+        closeOnEsc: false
+      })
     }
   }
 }
 </script>
 
 <style scoped>
+.btn {
+  margin: 10px auto;
+}
 </style>

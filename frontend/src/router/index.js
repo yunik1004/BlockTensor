@@ -12,11 +12,14 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-    { path: '/', name: 'Main', component: Main },
-    { path: '/scratch', name: 'Scratch', component: Scratch },
-    { path: '/Scroll', name: 'Scroll', component: Scroll },
+    { path: '/', name: 'Scroll', component: Scroll },
+    { path: '/template', name: 'Template', component: Template },
+    { path: '/scratch/:stageName', name: 'Scratch', component: Scratch },
+
+    { path: '/swal', name: 'Swal', component: Swal },
+    { path: '/select', name: 'Select', component: Select },
+
     { path: '*', name: 'NotFound', component: NotFound },
-    { path: '/Swal', name: 'Swal', component: Swal },
-    { path: '/Template', name: 'Template', component: Template }
+    { path: '/test', name: 'Main', component: Main }
   ]
 })
