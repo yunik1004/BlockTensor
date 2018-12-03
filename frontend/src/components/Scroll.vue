@@ -23,7 +23,35 @@
           </div>
           <div class="page-1--text-container-center">|</div>
           <div class="page-1--text-container-right">
-            <b-button type="button" class="button-Main" to="Template" v-animate="{value: 'bounceInRight', delay: 600}">START</b-button>
+            <div class="button-Main" v-bind:class="{open: formOpen}" v-animate="{value: 'bounceInRight', delay: 600}">
+              <div class="button-Main-collapsed" @click="buttonOpen()">START</div>
+              <div class="button-Main-expanded">
+                <span class="css-cancel-button" @click="buttonClose()"></span>
+                <div class="button-Main-expanded-subject">SIGN UP WITH EMAIL</div>
+                <div class="button-Main-expanded-signup">
+                  <input type="text" class="button-Main-expanded-text" v-model="email" placeholder="USERNAME">
+                  <hr class="button-Main-expanded-text-line">
+                  <input type="password" class="button-Main-expanded-text" v-model="password" placeholder="PASSWORD">
+                  <hr class="button-Main-expanded-text-line">
+                </div>
+                <div class="button-Main-expanded-button">SIGN ME UP!</div>
+                <div class="button-Main-expanded-button-group">
+                  <span class="button-Main-expanded-small-button google">
+                    <img src="../icons/google.svg" alt="google" height="30" width="30" />
+                  </span>
+                  <span class="button-Main-expanded-small-button facebook">
+                    <img src="../icons/facebook.svg" alt="facebook" height="30" width="30"/>
+                  </span>
+                </div>
+                <br/>
+                <div class="button-Main-expanded-signin">Already have account?</div>
+                <hr class="button-Main-expanded-line">
+                <br/>
+                <router-link to="/template" class="button-Main-expanded-guest">
+                  Play with guest ID!
+                </router-link>
+              </div>
+            </div>
           </div>
           <div class="page-1--text-container-right-footer" v-animate="{value: 'fadeIn', delay: 300}">- 2018 FALL SEMESTER</div>
         </div>
@@ -58,6 +86,11 @@
             </div>
           </div>
           <div class="page-3--text-container-contents">
+            <div class="page-3--text-box">
+              <img src="../icons/Profile.svg" class="page-3--text-box-icon">
+              <div class="page-3--text-box-text">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -71,6 +104,7 @@ export default {
   data () {
     var that = this
     return {
+      formOpen: false,
       index: 0,
       opts: {
         start: 0,
@@ -93,6 +127,13 @@ export default {
       this.$refs.fullpage.$fullpage.moveTo(index, true)
       this.index = index
       this.$refs.fullpage.$fullpage.$update()
+      this.formOpen = false
+    },
+    buttonOpen: function () {
+      this.formOpen = true
+    },
+    buttonClose: function () {
+      this.formOpen = false
     }
   }
 }
@@ -237,6 +278,8 @@ export default {
   padding: 9px 9px;
   border: none;
   outline: none;
+  transition: 1.0s;
+  background: #bfbfbf;
 }
 
 .btn-group-vertical button.active {
@@ -244,20 +287,78 @@ export default {
   color: #fff;
 }
 
+.btn-group-vertical button:hover {
+  background: #9c9c9c;
+}
+
+.btn-group-vertical button.active:hover {
+  background: rgba(0, 0, 0, .5);
+}
+
 .button-Main {
   background: #f0ebe6;
   color: #31353e;
   position: absolute;
-  bottom: 140px;
-  right: -60px;
-  font-size: 60px;
-  line-height: 60px;
+  width: 174px;
+  height: 60px;
+  vertical-align: middle;
+  text-align: center;
   cursor: pointer;
   transition: 800ms ease all;
+  transition: border-radius, 0.5s;
   outline: none;
   border-color: #f0ebe6;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 1px 6px rgba(0, 0, 0, 0.23);
+  bottom: 148px;
+  left: 580px;
+}
+
+.button-Main > .button-Main-collapsed {
+  font-size: 60px;
+  line-height: 60px;
   font-weight: lighter;
   letter-spacing: -2px;
+  transition: opacity 0s;
+  width: 170px;
+  height: 60px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.button-Main.open {
+  width: 400px;
+  height: 500px;
+  bottom: -100px;
+  overflow: hidden;
+}
+
+.button-Main.open:active {
+  background: #f0ebe6;
+  color: #31353e;
+}
+
+.button-Main > .button-Main-expanded {
+  transition: opacity 0s, overflow 0s 0s;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.button-Main.open > .button-Main-collapsed {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.button-Main.open > .button-Main-expanded {
+  text-align: center;
+  position: relative;
+  width: 360px;
+  height: 400px;
+  margin: 20px;
+  overflow: hidden;
+  opacity: 1;
+  transition: overflow 0s, height 0.3s 0.3s, width 0.3s 0.3s;
 }
 
 .button-Main:hover {
@@ -429,4 +530,158 @@ vr2 {
   bottom: 28px
 }
 
+.button-Main-expanded-subject {
+  position: relative;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  padding: 5px;
+}
+
+.button-Main-expanded-guest {
+  position: relative;
+  text-align: center;
+  color: #31353e;
+  display: inline-block;
+  top: -15px;
+  transition: 0.2s;
+  text-decoration: none;
+}
+
+.button-Main-expanded-guest:hover {
+  color: #918E8B;
+}
+
+.button-Main-expanded-text {
+  background: #f0ebe6;
+  width: 200px;
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: lighter;
+  border: none;
+  letter-spacing: 2px;
+}
+
+.button-Main-expanded-text:focus {
+  outline: none;
+}
+
+.button-Main-expanded-text-line {
+  padding: 0;
+  margin-top: 0;
+  width: 250px;
+  display: inline-block;
+  border: solid 0.5px #31353e;
+}
+
+.button-Main-expanded-signup {
+  position: relative;
+  top: 20px;
+}
+
+.button-Main-expanded-button {
+  position: relative;
+  background: #31353e;
+  color: #f0ebe6;
+  padding: 10px;
+  width: 250px;
+  display: inline-block;
+  top: 10px;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.button-Main-expanded-button:hover {
+  transform: scale(1.04);
+}
+
+.button-Main-expanded-button-group {
+  position: relative;
+}
+
+.button-Main-expanded-small-button {
+  position: relative;
+  display: inline-block;
+  width: 123px;
+  height: 46px;
+  top: 15px;
+  vertical-align: middle;
+  text-align: center;
+  padding: 5px;
+  transition: 0.25s;
+}
+
+.button-Main-expanded-small-button:hover {
+  transform: scale(1.04);
+}
+
+.button-Main-expanded-small-button.google {
+  background: #d6492f;
+}
+
+.button-Main-expanded-small-button.facebook {
+  background: #45619d;
+  padding: 6px;
+}
+
+.button-Main-expanded-line {
+  padding: 0;
+  margin-top: 20px;
+  width: 350px;
+  display: inline-block;
+  border: solid 1px #31353e;
+}
+
+.button-Main-expanded-signin {
+  display: inline-block;
+  transition: 0.5s;
+}
+
+.button-Main-expanded-signin:hover {
+  color: #918E8B;
+}
+
+.css-cancel-button {
+  display: inline-block;
+  position: relative;
+  margin: 0 20px 0 7px;
+  padding: 0;
+  width: 4px;
+  height: 20px;
+  background: #000;
+  transform: rotate(45deg);
+  left: 175px;
+}
+
+.css-cancel-button:before {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  width: 20px;
+  height: 4px;
+  margin-top: -2px;
+  background: #000;
+}
+
+.page-3--text-box {
+  display: inline-block;
+  position: absolute;
+  border: solid 2px black;
+  width: 200px;
+  height: 100px;
+  border-radius: 15px;
+}
+
+.page-3--text-box-icon {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  top: -15px;
+  left: -50px;
+}
 </style>

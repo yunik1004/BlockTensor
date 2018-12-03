@@ -36,7 +36,9 @@
               <div class="card-carousel--nav__right" @click="moveCarousel(1)" :disabled="atEndOfList"></div>
           </div>
           <div class="select-footer">
-            <div class="select-footer-text">- 2018 FALL SEMESTER</div>
+            <div class="select-footer-background">
+              <div class="select-footer-text">- 2018 FALL SEMESTER</div>
+            </div>
           </div>
         </main>
     </div>
@@ -426,11 +428,24 @@ export default {
   top: 75px;
 }
 
-.select-footer-text {
+.select-footer-background {
   position: relative;
+  display: block;
+  top: 60px;
+  width: 100%;
+  height: 149px;
+  background: #31353e;
+  margin: 0 auto;
+}
+
+.select-footer-text {
+  display: block;
+  position: absolute;
   font-weight: lighter;
   text-align: right;
-  right: 48px;
-  top: 174px;
+  right: 78px;
+  top: 144px;
+  margin: -30px;
+  color: #f0ebe6;
 }
 </style>
