@@ -167,28 +167,52 @@ class MnistDataset {
             `the number of labels (${this.dataset[labelsIndex].length})`);
 
     // Only create one big array to hold batch of images.
+    /*
     const imagesShape = [size, IMAGE_HEIGHT, IMAGE_WIDTH, 1];
     const images = new Float32Array(tf.util.sizeFromShape(imagesShape));
     const labels = new Int32Array(tf.util.sizeFromShape([size, 1]));
 
     let imageOffset = 0;
     let labelOffset = 0;
+
     for (let i = 0; i < size; ++i) {
       images.set(this.dataset[imagesIndex][i], imageOffset);
       labels.set(this.dataset[labelsIndex][i], labelOffset);
       imageOffset += IMAGE_FLAT_SIZE;
       labelOffset += 1;
     }
+    */
 
     // Sampling the image & labels -> imageShape is also changed
+    // size: size of total dataset
+    let numSamples
+    if (isTrainingData) {
+      numSamples = 1000
+    } else {
+      numSamples = 10
+    }
+
+    let sampleIndex = Array.from({ length: numSamples }, () => Math.floor(Math.random() * size))
+
+    const sampleImagesShape = [numSamples, IMAGE_HEIGHT, IMAGE_WIDTH, 1]
+    const sampleImages = new Float32Array(tf.util.sizeFromShape(sampleImagesShape))
+    const sampleLabels = new Int32Array(tf.util.sizeFromShape([numSamples, 1]))
+
+    let sampleImageOffset = 0
+    let sampleLabelOffset = 0
+    for (let i = 0; i < numSamples; i++) {
+      let idx = sampleIndex[i]
+
+      sampleImages.set(this.dataset[imagesIndex][idx], sampleImageOffset)
+      sampleLabels.set(this.dataset[labelsIndex][idx], sampleLabelOffset)
+
+      sampleImageOffset += IMAGE_FLAT_SIZE
+      sampleLabelOffset += 1
+    }
 
     return {
-      // images: `tf.tensor4d([${images}], [${imagesShape}])`,
-      // labels: `tf.oneHot(tf.tensor1d([${labels}], 'int32'), ${LABEL_FLAT_SIZE}).toFloat()`
-      images: `${images}`,
-      labels: `${labels}`,
-      imagesShape: imagesShape,
-      label_flat_size: LABEL_FLAT_SIZE
+      images: `tf.tensor4d([${sampleImages}], [${sampleImagesShape}])`,
+      labels: `tf.oneHot(tf.tensor1d([${sampleLabels}], 'int32'), ${LABEL_FLAT_SIZE}).toFloat()`
     }
   }
 }

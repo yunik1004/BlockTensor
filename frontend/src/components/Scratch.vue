@@ -213,20 +213,9 @@ export default {
 
         this.$http.get('/api/data/train/' + this.$route.params.stageName).then((result) => {
           // eslint-disable-next-line
-          // this.trainData = eval('(' + result.data.trainData + ')')
+          this.trainData = eval('(' + result.data.trainData + ')')
           // eslint-disable-next-line
-          // this.trainLabels = eval('(' + result.data.trainLabels + ')')
-
-          console.log('ttt')
-          let trainData = JSON.parse('[' + result.data.trainData + ']')
-          console.log('www')
-
-          if (result.data.type === 'number') {
-            console.log('Number!')
-          } else if (result.data.type === 'image') {
-            this.trainData = tf.tensor4d(trainData, result.data.dataShape)
-            console.log('image!!!')
-          }
+          this.trainLabels = eval('(' + result.data.trainLabels + ')')
 
           console.log('Successfully received training data')
         })

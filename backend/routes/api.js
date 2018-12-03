@@ -18,27 +18,7 @@ router.get('/data/train/:stageName', function (req, res, next) {
 
   const stageData = stageDataFunc()
 
-  let sendData
-
-  if (stageData.type === 'number') {
-    sendData = {
-      'type': stageData.type,
-      'trainData': stageData.trainData,
-      'trainLabels': stageData.trainLabels,
-      'dataShape': stageData.dataShape,
-      'labelShape': stageData.labelShape
-    }
-  } else if (stageData.type === 'image') {
-    sendData = {
-      'type': stageData.type,
-      'trainData': stageData.trainData,
-      'trainLabels': stageData.trainLabels,
-      'dataShape': stageData.dataShape,
-      'label_flat_size': stageData.label_flat_size
-    }
-  }
-
-  res.json(sendData)
+  res.json(stageData)
 })
 
 router.get('/data/test/:stageName', function (req, res, next) {

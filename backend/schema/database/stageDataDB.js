@@ -11,10 +11,8 @@ StageDataDB['1'] = function () {
 
   return {
     'type': 'number',
-    'trainData': `${trainData}`,
-    'trainLabels': `${trainLabel}`,
-    'dataShape': trainDataSize,
-    'labelShape': trainLabelSize
+    'trainData': `tf.tensor([${trainData}], [${trainDataSize}])`,
+    'trainLabels': `tf.tensor([${trainLabel}], [${trainLabelSize}])`
   }
 }
 
@@ -24,9 +22,7 @@ StageDataDB['B'] = function () {
   return {
     'type': 'image',
     'trainData': mnistTrainData.images,
-    'trainLabels': mnistTrainData.labels,
-    'dataShape': mnistTrainData.imagesShape,
-    'label_flat_size': mnistTrainData.label_flat_size
+    'trainLabels': mnistTrainData.labels
   }
 }
 
@@ -39,10 +35,8 @@ StageDataDB['C'] = function () {
 
   return {
     'type': 'number',
-    'trainData': `${trainData}`,
-    'trainLabels': `${trainLabel}`,
-    'dataShape': trainDataSize,
-    'labelShape': trainLabelSize
+    'trainData': `tf.tensor([${trainData}], [${trainDataSize}])`,
+    'trainLabels': `tf.tensor([${trainLabel}], [${trainLabelSize}])`
   }
 }
 
@@ -55,10 +49,8 @@ StageDataDB['D'] = function () {
 
   return {
     'type': 'number',
-    'trainData': `${trainData}`,
-    'trainLabels': `${trainLabel}`,
-    'dataShape': trainDataSize,
-    'labelShape': trainLabelSize
+    'trainData': `tf.tensor([${trainData}], [${trainDataSize}])`,
+    'trainLabels': `tf.tensor([${trainLabel}], [${trainLabelSize}])`
   }
 }
 
@@ -71,10 +63,8 @@ StageDataDB['E'] = function () {
 
   return {
     'type': 'number',
-    'trainData': `${trainData}`,
-    'trainLabels': `${trainLabel}`,
-    'dataShape': trainDataSize,
-    'labelShape': trainLabelSize
+    'trainData': `tf.tensor([${trainData}], [${trainDataSize}])`,
+    'trainLabels': `tf.tensor([${trainLabel}], [${trainLabelSize}])`
   }
 }
 
