@@ -294,6 +294,7 @@ export default {
 
           let tbModel
           let tbThis = this
+          let tbtmp
 
           function arraysEqual(a, b) {
             if (a === b) return true;

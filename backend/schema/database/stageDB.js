@@ -4,14 +4,14 @@ StageDB['1'] = {
   'tag': '1',
   'info': 'Stage 1',
   'details': 'details',
-  'blocks': ['sequentialModel', 'denseLayer', 'activationLayer', 'train']
+  'blocks': ['sequentialModel', 'dense1dLayer', 'activationLayer', 'train']
 }
 
 StageDB['B'] = {
   'tag': 'B',
   'info': 'Stage B',
   'details': 'details',
-  'blocks': ['sequentialModel', 'train']
+  'blocks': ['sequentialModel', 'flattenLayer', 'dense1dLayer', 'conv2dLayer', 'maxPooling2dLayer', 'activationLayer', 'train']
 }
 
 StageDB['C'] = {
