@@ -432,36 +432,37 @@ export default {
 }
 
 .result-container {
-  display: inline-block;
-  position: relative;
-  top: 100px;
+  position: absolute;
+  top: 150px;
+  left: 82px;
+  width: 200px;
 }
 
 .result-container-header {
-  position: relative;
+  position: absolute;
   font-size: 25px;
   line-height: 25px;
   font-weight: bolder;
-  right: 80px;
 }
 
 .result-container-result {
-  position: relative;
-  top: 15px;
+  position: absolute;
+  left: 25px;
+  top: 35px;
 }
 
 .input-container-header {
-  position: relative;
+  position: absolute;
   font-size: 25px;
   line-height: 25px;
   font-weight: bolder;
-  float: left;
   left: 80px;
 }
 
 .test-container {
   position: relative;
   top: 15px;
+  left: -75px;
 }
 
 </style>
