@@ -280,7 +280,7 @@ export default {
       Blockly.defineBlocksWithJsonArray([{
         'type': 'startBlock',
         'message0': 'Build model here!',
-        'nextStatement': null,
+        'nextStatement': 'start_model_conn',
         'colour': '188',
         'tooltip': 'Build model here!!'
       }])

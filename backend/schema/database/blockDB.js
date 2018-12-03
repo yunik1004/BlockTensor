@@ -3,14 +3,14 @@ let BlockDB = {}
 BlockDB['sequentialModel'] = {
   'category': 'Model',
   'struct': {
-    'type': 'Model',
+    'type': 'modelBlock',
     'message0': 'Make a model',
     'message1': 'Layers %1',
     'args1': [
       {
         'type': 'input_statement',
         'name': 'LAYERS',
-        'check': ['Layer']
+        'check': ['layer_conn']
       }
     ],
     'message2': 'Loss function %1',
@@ -39,8 +39,8 @@ BlockDB['sequentialModel'] = {
         ]
       }
     ],
-    'previousStatement': null,
-    'nextStatement': null,
+    'previousStatement': 'start_model_conn',
+    'nextStatement': 'model_train_conn',
     'colour': 230,
     'tooltip': 'Define a model'
   },
@@ -89,7 +89,7 @@ BlockDB['sequentialModel'] = {
 BlockDB['denseLayer'] = {
   'category': 'Layer',
   'struct': {
-    'type': 'Layer',
+    'type': 'layerBlock',
     'message0': 'Dense layer with %1 unit',
     'args0': [
       {
@@ -98,8 +98,8 @@ BlockDB['denseLayer'] = {
         'value': 1
       }
     ],
-    'previousStatement': null,
-    'nextStatement': null,
+    'previousStatement': 'layer_conn',
+    'nextStatement': 'layer_conn',
     'colour': 125,
     'tooltip': 'Define a dense layer'
   },
@@ -115,7 +115,7 @@ BlockDB['denseLayer'] = {
 BlockDB['activationLayer'] = {
   'category': 'Layer',
   'struct': {
-    'type': 'Layer',
+    'type': 'layerBlock',
     'message0': 'Activation layer %1',
     'args0': [
       {
@@ -130,8 +130,8 @@ BlockDB['activationLayer'] = {
         ]
       }
     ],
-    'previousStatement': null,
-    'nextStatement': null,
+    'previousStatement': 'layer_conn',
+    'nextStatement': 'layer_conn',
     'colour': 125,
     'tooltip': 'Define an activation layer'
   },
@@ -147,7 +147,7 @@ BlockDB['activationLayer'] = {
 BlockDB['train'] = {
   'category': 'Train',
   'struct': {
-    'type': 'Train',
+    'type': 'trainBlock',
     'message0': 'Train the model with...',
     'message1': 'batchSize: %1, epochs: %2, iteration: %3, validationSplit: %4',
     'args1': [
@@ -172,7 +172,7 @@ BlockDB['train'] = {
         'value': 0.15
       }
     ],
-    'previousStatement': null,
+    'previousStatement': 'model_train_conn',
     'colour': 300,
     'tooltip': 'Train the model'
   },
