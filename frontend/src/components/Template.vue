@@ -129,8 +129,8 @@ export default {
     if (this.$store.state.firstRun) {
       setTimeout(() => {
         this.$swal({
-          title: 'HELLO',
-          text: 'information',
+          title: 'Welcome to TensorBlock',
+          text: 'With TensorBlock, you can build your own model and test it.',
           button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
@@ -159,7 +159,6 @@ export default {
   justify-content: center;
   margin: 100px 0 40px;
   color: #666a73;
-  top: 500px;
 }
 
 .card-carousel {
@@ -296,14 +295,14 @@ export default {
 }
 
 .header-name {
-  position: relative;
+  position: absolute;
   line-height: 36px;
   font-size: 36px;
   font-weight: bolder;
   letter-spacing: -1px;
   display: inline-block;
   top: 18px;
-  right: 600px;
+  left: 90px;
   color: #31353e;
   text-decoration: none;
 }
@@ -425,13 +424,13 @@ export default {
   line-height: 40px;
   font-family: Helvetica Neue, Roboto, Arial;
   font-weight: lighter;
-  top: 75px;
+  top: 80px;
 }
 
 .select-footer-background {
   position: relative;
   display: block;
-  top: 60px;
+  bottom: -97px;
   width: 100%;
   height: 149px;
   background: #31353e;
