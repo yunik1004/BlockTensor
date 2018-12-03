@@ -1,52 +1,75 @@
 <template>
-  <div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-4">
-          <p>Training data가 들어갈 자리</p>
-          <p>train data: <!--{{trainData}}--></p>
-          <p>train labels: <!--{{trainLabels}}--></p>
-
-          <p>Train result</p>
-          <p>Train loss: {{lastTrainLoss}}</p>
-          <p>Validation loss: {{lastValidLoss}}</p>
+  <div class="app">
+    <Push width="300" @openMenu="openSlide()" @closeMenu="closeSlide()">
+      <a id="Profile" href="#">
+        <img class="sidebar-icon" src="../icons/Profile_white.svg">
+        <span>Profile</span>
+      </a>
+      <a id="About Us" href="#">
+        <img class="sidebar-icon2" src="../icons/information_white.svg">
+        <span>AboutUs</span>
+      </a>
+      <a id="Log Out" href="#">
+        <img class="sidebar-icon" src="../icons/logout_white.svg">
+        <span>LogOut</span>
+      </a>
+    </Push>
+    <main>
+      <div class="container-fluid">
+        <router-link to="/" class="header-name">TensorBlock</router-link>
+        <div class="row">
+          <div class="col-sm-4 top-pos">
+            <div class="input-container">
+              <div class="input-container-header">Training Data</div>
+              <type1 v-if="inputStage == 1"></type1>
+              <type2 v-if="inputStage == 2"></type2>
+            </div>
+            <div class="result-container">
+              <div class="result-container-header">Training Result</div>
+              <div class="result-container-result">
+                <p>Train loss: {{lastTrainLoss}}</p>
+                <p>Validation loss: {{lastValidLoss}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="classchart">
+            <line-chart :chart-data="trainLossCollection"></line-chart>
+          </div>
         </div>
-        <div class="classchart">
-          <line-chart :chart-data="trainLossCollection"></line-chart>
+        <div class="row">
+          <div class="col-sm-4 bottom-pos">
+            <div class="test-container">
+              <p>Expected output: {{testLabels}}</p>
+            </div>
+          </div>
+          <div class="col-sm-8" id="blocklyArea"></div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-4">
-          <p>Test data: {{testData}}</p>
-          <p>Expected output: {{testLabels}}</p>
-        </div>
-        <div class="col-sm-8" id="blocklyArea"></div>
+
+      <!-- Blockly workspace  -->
+      <div id="blocklyDiv" style="position: absolute"></div>
+      <xml id="toolbox" style="display: none">
+        <category name="- Modules -"></category>
+        <category></category>
+        <category-component
+          v-for="blockList in stage.blockLists" :key="blockList.category"
+          :name="blockList.category"
+          :blockList="blockList.blocks">
+        </category-component>
+      </xml>
+
+      <!-- Start blocks  -->
+      <xml id="startBlocks" style="display: none">
+        <block type="startBlock" deletable="false" x="200" y="50"></block>
+      </xml>
+
+      <!-- Buttons in front of the Blockly workspace -->
+      <div id="trainBtns" class="btn-group-vertical" style="position: absolute">
+        <button type="button" class="btn btn-outline-primary" @click="runCode()">Train</button>
+        <button type="button" class="btn btn-outline-success" @click="testCode()">Test</button>
+        <button type="button" class="btn btn-outline-danger" @click="showCode()">Code</button>
       </div>
-    </div>
-
-    <!-- Blockly workspace  -->
-    <div id="blocklyDiv" style="position: absolute"></div>
-    <xml id="toolbox" style="display: none">
-      <category name="- Modules -"></category>
-      <category></category>
-      <category-component
-        v-for="blockList in stage.blockLists" :key="blockList.category"
-        :name="blockList.category"
-        :blockList="blockList.blocks">
-      </category-component>
-    </xml>
-
-    <!-- Start blocks  -->
-    <xml id="startBlocks" style="display: none">
-      <block type="startBlock" deletable="false" x="200" y="50"></block>
-    </xml>
-
-    <!-- Buttons in front of the Blockly workspace -->
-    <div id="trainBtns" class="btn-group-vertical" style="position: absolute">
-      <button type="button" class="btn btn-outline-primary" @click="runCode()">Train</button>
-      <button type="button" class="btn btn-outline-success" @click="testCode()">Test</button>
-      <button type="button" class="btn btn-outline-danger" @click="showCode()">Code</button>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -55,6 +78,7 @@ import Blockly from 'node-blockly/browser'
 import JSONfn from 'json-fn'
 import gql from 'graphql-tag'
 import LineChart from './chart/LineChart.js'
+import { Push } from 'vue-burger-menu'
 
 // Blockly workspace
 let workspace
@@ -124,6 +148,7 @@ export default {
   props: ['stageName'],
   data () {
     return {
+      inputStage: null,
       stage: {
         'details': '',
         'blockLists': []
@@ -237,13 +262,18 @@ export default {
 
     window.addEventListener('resize', this.onResize, false)
     this.onResize()
+
+    this.inputStage = this.$route.params.stageName
   },
   updated () {
     this.onResize()
   },
   components: {
+    Push,
     'category-component': categoryComponent,
-    'line-chart': LineChart
+    'line-chart': LineChart,
+    'type1': () => import('../components/type1'),
+    'type2': () => import('../components/type2')
   },
   methods: {
     runCode: function () {
@@ -372,6 +402,10 @@ export default {
         closeOnClickOutside: false,
         closeOnEsc: false
       })
+    },
+    openSlide () {
+    },
+    closeSlide () {
     }
   }
 }
@@ -383,7 +417,51 @@ export default {
 }
 
 .classchart {
-  width: 200px !important;
-  height: 200px !important;
+  position: relative;
+  left: 50px;
+  width: 250px !important;
+  height: 250px !important;
 }
+
+.top-pos {
+  top: 100px;
+}
+
+.bottom-pos {
+  top: 250px;
+}
+
+.result-container {
+  display: inline-block;
+  position: relative;
+  top: 100px;
+}
+
+.result-container-header {
+  position: relative;
+  font-size: 25px;
+  line-height: 25px;
+  font-weight: bolder;
+  right: 80px;
+}
+
+.result-container-result {
+  position: relative;
+  top: 15px;
+}
+
+.input-container-header {
+  position: relative;
+  font-size: 25px;
+  line-height: 25px;
+  font-weight: bolder;
+  float: left;
+  left: 80px;
+}
+
+.test-container {
+  position: relative;
+  top: 15px;
+}
+
 </style>
