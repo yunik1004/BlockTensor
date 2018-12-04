@@ -23,6 +23,7 @@
               <div class="input-container-header">Training Data</div>
               <type1 v-if="inputStage == 1"></type1>
               <type2 v-if="inputStage == 2"></type2>
+              <drawing-paper :model="model"></drawing-paper>
             </div>
             <div class="result-container">
               <div class="result-container-header">Training Result</div>
@@ -34,6 +35,9 @@
           </div>
           <div class="classchart">
             <line-chart :chart-data="trainLossCollection"></line-chart>
+          </div>
+          <div class="classchart">
+            <line-chart :chart-data="trainAccCollection"></line-chart>
           </div>
         </div>
         <div class="row">
@@ -67,7 +71,7 @@
       <div id="trainBtns" class="btn-group-vertical" style="position: absolute">
         <button type="button" class="btn btn-outline-primary" @click="runCode()">Train</button>
         <button type="button" class="btn btn-outline-success" @click="testCode()">Test</button>
-        <button type="button" class="btn btn-outline-danger" @click="showCode()">Code</button>
+        <button type="button" class="btn btn-outline-danger" @click="showCode()" style="display: none;">Code</button>
       </div>
     </main>
   </div>
@@ -161,7 +165,9 @@ export default {
 
       trainResults: {
         'loss': [],
-        'val_loss': []
+        'val_loss': [],
+        'acc': [],
+        'val_acc': []
       },
 
       testData: [],
@@ -201,6 +207,26 @@ export default {
             label: 'Val Loss',
             fill: false,
             data: this.trainResults.val_loss
+          }
+        ]
+      }
+    },
+    trainAccCollection: function () {
+      let accSize = this.trainResults.acc.length
+      let accLabels = [...Array(accSize + 1).keys()].slice(1)
+
+      return {
+        labels: accLabels,
+        datasets: [
+          {
+            label: 'Acc',
+            fill: false,
+            data: this.trainResults.acc
+          },
+          {
+            label: 'Val Acc',
+            fill: false,
+            data: this.trainResults.val_acc
           }
         ]
       }
@@ -273,12 +299,15 @@ export default {
     'category-component': categoryComponent,
     'line-chart': LineChart,
     'type1': () => import('../components/type1'),
-    'type2': () => import('../components/type2')
+    'type2': () => import('../components/type2'),
+    'drawing-paper': () => import('../components/DrawingPaper')
   },
   methods: {
     runCode: function () {
       this.trainResults['loss'] = []
       this.trainResults['val_loss'] = []
+      this.trainResults['acc'] = []
+      this.trainResults['val_acc'] = []
 
       let code = Blockly.JavaScript.workspaceToCode(workspace)
       try {

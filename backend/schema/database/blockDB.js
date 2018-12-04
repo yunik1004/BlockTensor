@@ -186,7 +186,7 @@ BlockDB['conv2dLayer'] = {
         let output_width = Math.floor((input_size[1] - kernelSize) / strides) + 1
         let output_height = Math.floor((input_size[2] - kernelSize) / strides) + 1
 
-        tb_output_size = [null, output_width, output_height, input_size[3] * filters]
+        tb_output_size = [null, output_width, output_height, filters]
       }
     `
     return code
@@ -364,13 +364,15 @@ BlockDB['train'] = {
 
           console.log(history)
 
-          const loss = history.history.loss[0]
-          const val_loss = history.history.val_loss[0]
-          const accuracy = history.history.acc[0]
-          const val_accuracy = history.history.val_acc[0]
+          const loss = history.history.loss.slice(-1)[0]
+          const val_loss = history.history.val_loss.slice(-1)[0]
+          const acc = history.history.acc.slice(-1)[0]
+          const val_acc = history.history.val_acc.slice(-1)[0]
 
           tbThis.trainResults['loss'].push(loss)
           tbThis.trainResults['val_loss'].push(val_loss)
+          tbThis.trainResults['acc'].push(acc)
+          tbThis.trainResults['val_acc'].push(val_acc)
         }
       }
 

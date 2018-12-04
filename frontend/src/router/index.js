@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from '@/components/Main'
 import Scratch from '@/components/Scratch'
 import Scroll from '@/components/Scroll'
 import NotFound from '@/components/NotFound'
@@ -18,7 +17,6 @@ export default new Router({
 
     { path: '*', name: 'NotFound', component: NotFound },
 
-    { path: '/test', name: 'Main', component: Main },
     { path: '/swal', name: 'Swal', component: Swal }
   ]
 })
