@@ -20,10 +20,7 @@
         <div class="row">
           <div class="col-sm-4 top-pos">
             <div class="input-container">
-              <div class="input-container-header">
-                <p class="tooltip-css">Training Data
-                  <span class="tooltip-css-text">......</span>
-                </p>
+              <div class="input-container-header">Training Data
                 <drawing-paper :model="model" v-if="inputStage == 'Number Recognition'"></drawing-paper>
               </div>
               <div class="input-container-contents">
@@ -34,8 +31,8 @@
             <div class="result-container">
               <div class="result-container-header">Training Result</div>
               <div class="result-container-result">
-                <p>Train loss: {{lastTrainLoss}}</p>
-                <p>Validation loss: {{lastValidLoss}}</p>
+                <div><p class="tooltip-css">Train loss:<span class="tooltip-css-text">error on the training set of data</span></p>&nbsp;{{lastTrainLoss}}</div>
+                <div><p class="tooltip-css">Validation loss:<span class="tooltip-css-text">error after running the validation set of data through the trained network</span></p>&nbsp;{{lastValidLoss}}</div>
               </div>
             </div>
           </div>
@@ -268,14 +265,6 @@ export default {
         }
       },
       result (data) {
-        this.$swal({
-          title: this.$route.params.stageName,
-          text: this.stage.details,
-          button: true,
-          closeOnClickOutside: false,
-          closeOnEsc: false
-        })
-
         this.$http.get('/api/data/train/' + this.$route.params.stageName).then((result) => {
           // eslint-disable-next-line
           this.trainData = eval('(' + result.data.trainData + ')')
@@ -349,7 +338,6 @@ export default {
           title: 'No Trained Model exists',
           text: 'Make model first',
           type: 'error',
-          button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
         })
@@ -439,7 +427,6 @@ export default {
         title: 'Training Success!!!',
         text: resTxt,
         type: 'success',
-        button: true,
         closeOnClickOutside: false,
         closeOnEsc: false
       })
@@ -449,7 +436,6 @@ export default {
         title: 'Training Fail!!!',
         text: errMsg,
         type: 'error',
-        button: true,
         closeOnClickOutside: false,
         closeOnEsc: false
       })
@@ -534,13 +520,15 @@ export default {
   position: relative;
   display: inline-block;
   border-bottom: 2px dotted blue;
+  margin: 0;
+  padding: 0;
 }
 
 .tooltip-css .tooltip-css-text {
   visibility: hidden;
   width: 200px;
-  background: indigo;
-  color: yellow;
+  background: #FFFAF4;
+  color: black;
   text-align: center;
   border-radius: 10px;
   padding: 10px 5px;
@@ -549,6 +537,8 @@ export default {
   left: 50%;
   margin-left: -105px;
   z-index: 10;
+  font-weight: lighter;
+  font-size: 15px;
 }
 
 .tooltip-css:hover .tooltip-css-text {
@@ -563,6 +553,6 @@ export default {
   margin-left: -10px;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent indigo transparent;
+  border-color: transparent transparent #FFFAF4 transparent;
 }
 </style>

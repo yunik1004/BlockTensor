@@ -105,8 +105,10 @@ export default {
         title: stageName,
         text: info,
         type: 'info',
-        buttons: ['cancel', 'go'],
-        dangerMode: true
+        showCancelButton: true,
+        confirmButtonText: 'Go!',
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#d33'
       }).then((goStage) => {
         if (goStage) {
           this.$router.push({
@@ -129,7 +131,6 @@ export default {
       setTimeout(() => {
         this.$swal({
           title: 'Welcome to TensorBlock',
-          button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
         })
