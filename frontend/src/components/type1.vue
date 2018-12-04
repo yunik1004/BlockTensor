@@ -46,6 +46,10 @@ export default {
     }
   },
   mounted () {
+    this.$swal({
+      text: 'This is a model block.',
+      imageUrl: require('../assets/model_block.png')
+    })
     this.changeOnData()
     this.changeOnLabel()
     this.changeOnTest()

@@ -104,7 +104,7 @@ export default {
       this.$swal({
         title: stageName,
         text: info,
-        icon: 'info',
+        type: 'info',
         buttons: ['cancel', 'go'],
         dangerMode: true
       }).then((goStage) => {

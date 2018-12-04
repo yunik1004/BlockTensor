@@ -338,7 +338,7 @@ export default {
         this.$swal({
           title: 'No Trained Model exists',
           text: 'Make model first',
-          icon: 'error',
+          type: 'error',
           button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
@@ -424,11 +424,11 @@ export default {
       trainBtns.style.top = y + 10 + 'px'
     },
     alertFinTraining: function () {
-      let resTxt = `Training loss: ${this.lastTrainLoss}\nValidation loss: ${this.lastValidLoss}`
+      let resTxt = `Training loss: ${this.lastTrainLoss}\n\nValidation loss: ${this.lastValidLoss}`
       this.$swal({
         title: 'Training Success!!!',
         text: resTxt,
-        icon: 'success',
+        type: 'success',
         button: true,
         closeOnClickOutside: false,
         closeOnEsc: false
@@ -438,7 +438,7 @@ export default {
       this.$swal({
         title: 'Training Fail!!!',
         text: errMsg,
-        icon: 'error',
+        type: 'error',
         button: true,
         closeOnClickOutside: false,
         closeOnEsc: false

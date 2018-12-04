@@ -10,7 +10,7 @@ import ApolloClient from 'apollo-boost'
 import VueApollo from 'vue-apollo'
 import VueFullpage from 'fullpage-vue'
 import BootstrapVue from 'bootstrap-vue'
-import VueSwal from 'vue-swal'
+import VueSweetalert2 from 'vue-sweetalert2'
 import VuePromiseBtn from 'vue-promise-btn'
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import 'expose-loader?$!expose-loader?jQuery!jquery'
@@ -26,7 +26,7 @@ Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 Vue.use(VueFullpage)
 Vue.use(BootstrapVue)
-Vue.use(VueSwal)
+Vue.use(VueSweetalert2)
 Vue.use(VuePromiseBtn)
 
 const apolloProvider = new VueApollo({
