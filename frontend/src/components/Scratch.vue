@@ -263,7 +263,6 @@ export default {
         this.$swal({
           title: this.$route.params.stageName,
           text: this.stage.details,
-          button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
         })
@@ -339,7 +338,6 @@ export default {
           title: 'No Trained Model exists',
           text: 'Make model first',
           type: 'error',
-          button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
         })
@@ -429,7 +427,6 @@ export default {
         title: 'Training Success!!!',
         text: resTxt,
         type: 'success',
-        button: true,
         closeOnClickOutside: false,
         closeOnEsc: false
       })
@@ -439,7 +436,6 @@ export default {
         title: 'Training Fail!!!',
         text: errMsg,
         type: 'error',
-        button: true,
         closeOnClickOutside: false,
         closeOnEsc: false
       })

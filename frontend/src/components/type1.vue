@@ -46,10 +46,28 @@ export default {
     }
   },
   mounted () {
-    this.$swal({
-      text: 'This is a model block.',
-      imageUrl: require('../assets/model_block.png')
-    })
+    this.$swal.mixin({
+      confirmButtonText: 'Next &rarr;',
+      progressSteps: ['1', '2', '3', '4']
+    }).queue([
+      {
+        text: 'This is a model block.',
+        imageUrl: require('../assets/model_block.png')
+      },
+      {
+        text: 'This is a dense layer block.',
+        imageUrl: require('../assets/dense_layer_block.png')
+      },
+      {
+        text: 'This is a activation layer block.',
+        imageUrl: require('../assets/activation_layer_block.png')
+      },
+      {
+        text: 'This is a model trainer block.',
+        imageUrl: require('../assets/model_trainer_block.png'),
+        confirmButtonText: 'Start!'
+      }])
+
     this.changeOnData()
     this.changeOnLabel()
     this.changeOnTest()
