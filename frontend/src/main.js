@@ -43,7 +43,7 @@ Vue.config.ignoredElements = ['xml', 'category', 'block', 'value', 'field', 'vr1
 export const store = new Vuex.Store({
   state: {
     firstRun: true,
-    test1data: [],
+    test1inputs: [],
     test1labels: [],
     test1tests: []
   }
