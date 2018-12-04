@@ -2,15 +2,26 @@
   <div>
     <canvas id="gaf" width="200" height="200" style="border: 1px black solid;"></canvas>
     <canvas id="dstcvs" width="28" height="28" style="border: 1px black solid; display: none;"></canvas>
+    <bar-chart :height="150" :chart-data="showDigitPriority()"></bar-chart>
     <button id="clearCanvas" type="button" v-on:click="canvasClear()">Clear</button>
     <button id="go" type="button" v-on:click="canvasPredict()">Predict!</button>
   </div>
 </template>
 
 <script>
+import BarChart from './chart/BarChart.js'
+
 export default {
   name: 'DrawingPaper',
   props: ['model'],
+  data () {
+    return {
+      predict: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  },
+  components: {
+    'bar-chart': BarChart
+  },
   mounted () {
     this.initCanvas()
   },
@@ -69,13 +80,25 @@ export default {
       }
 
       // eslint-disable-next-line
-      const predict = this.model.predictOnBatch(tf.tensor(input, [1, 28, 28, 1])).dataSync()
+      this.predict = this.model.predictOnBatch(tf.tensor(input, [1, 28, 28, 1])).dataSync()
 
-      console.log(predict)
+      console.log(this.predict)
     },
     canvasClear: function () {
       document.getElementById('gaf').getContext('2d').clearRect(0, 0, 200, 200)
       document.getElementById('dstcvs').getContext('2d').clearRect(0, 0, 28, 28)
+      this.predict = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    showDigitPriority: function () {
+      return {
+        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        datasets: [
+          {
+            labels: 'Digits',
+            data: this.predict
+          }
+        ]
+      }
     }
   }
 }

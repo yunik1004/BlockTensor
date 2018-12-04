@@ -207,12 +207,16 @@ export default {
           {
             label: 'Loss',
             fill: false,
-            data: this.trainResults.loss
+            data: this.trainResults.loss,
+            borderColor: 'blue',
+            borderWidth: 1,
           },
           {
             label: 'Val Loss',
             fill: false,
-            data: this.trainResults.val_loss
+            data: this.trainResults.val_loss,
+            borderColor: 'red',
+            borderWidth: 1,
           }
         ]
       }
@@ -227,12 +231,16 @@ export default {
           {
             label: 'Acc',
             fill: false,
-            data: this.trainResults.acc
+            data: this.trainResults.acc,
+            borderColor: 'blue',
+            borderWidth: 1,
           },
           {
             label: 'Val Acc',
             fill: false,
-            data: this.trainResults.val_acc
+            data: this.trainResults.val_acc,
+            borderColor: 'red',
+            borderWidth: 1,
           }
         ]
       }
@@ -310,11 +318,13 @@ export default {
   },
   methods: {
     runCode: function () {
-      // eslint-disable-next-line
-      this.trainData = tf.tensor(this.$store.state.test1inputs, [5, 1])
-      // eslint-disable-next-line
-      this.trainLabels = tf.tensor(this.$store.state.test1labels, [5, 1])
-      this.testdata = this.$store.state.test1tests
+      if (this.inputStage === 'Sequence Prediction') {
+        // eslint-disable-next-line
+        this.trainData = tf.tensor(this.$store.state.test1inputs, [5, 1])
+        // eslint-disable-next-line
+        this.trainLabels = tf.tensor(this.$store.state.test1labels, [5, 1])
+        this.testdata = this.$store.state.test1tests
+      }
 
       this.trainResults['loss'] = []
       this.trainResults['val_loss'] = []
