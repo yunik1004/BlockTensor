@@ -57,6 +57,14 @@ export default {
       }
 
       if (this.model == null) {
+        this.$swal({
+          title: 'Model not exists!!',
+          text: 'Generate model first',
+          icon: 'error',
+          button: true,
+          closeOnClickOutside: false,
+          closeOnEsc: false
+        })
         return
       }
 

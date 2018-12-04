@@ -1,35 +1,35 @@
 let StageDB = {}
 
-StageDB['1'] = {
-  'tag': '1',
+StageDB['Sequence Prediction'] = {
+  'tag': 'Number',
   'info': 'Stage 1',
   'details': 'details',
   'blocks': ['sequentialModel', 'dense1dLayer', 'activationLayer', 'train']
 }
 
-StageDB['B'] = {
-  'tag': 'B',
-  'info': 'Stage B',
+StageDB['Number Recognition'] = {
+  'tag': 'Mnist',
+  'info': 'Stage 2',
   'details': 'details',
   'blocks': ['sequentialModel', 'flattenLayer', 'dense1dLayer', 'conv2dLayer', 'maxPooling2dLayer', 'activationLayer', 'train']
 }
 
-StageDB['C'] = {
-  'tag': 'C',
+StageDB['Cats & Dogs Classification'] = {
+  'tag': 'Image',
   'info': 'Stage C',
   'details': 'details',
   'blocks': []
 }
 
-StageDB['D'] = {
-  'tag': 'D',
+StageDB['Facial App Protector'] = {
+  'tag': 'Image',
   'info': 'Stage D',
   'details': 'details',
   'blocks': []
 }
 
-StageDB['E'] = {
-  'tag': 'E',
+StageDB['Tic Tac Toe Learning'] = {
+  'tag': 'NN',
   'info': 'Stage E',
   'details': 'details',
   'blocks': []

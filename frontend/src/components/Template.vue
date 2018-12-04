@@ -25,9 +25,8 @@
                           <div id="cards" class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name, item.info)">
                               <img src="https://placehold.it/200x200">
                               <div class="card-carousel--card--footer">
-                                  <p>Item: {{ item.name }}</p>
-                                  <br/><br/>
-                                  <p>Tag: {{ item.tag }}</p>
+                                  <p class="card-item-name">{{ item.name }}</p>
+                                  <p class="card-item-tag">{{ item.tag }}</p>
                               </div>
                           </div>
                       </div>
@@ -130,7 +129,6 @@ export default {
       setTimeout(() => {
         this.$swal({
           title: 'Welcome to TensorBlock',
-          text: 'With TensorBlock, you can build your own model and test it.',
           button: true,
           closeOnClickOutside: false,
           closeOnEsc: false
@@ -430,9 +428,9 @@ export default {
 .select-footer-background {
   position: relative;
   display: block;
-  bottom: -97px;
   width: 100%;
-  height: 149px;
+  height: 168px;
+  top: 98px;
   background: #31353e;
   margin: 0 auto;
 }
