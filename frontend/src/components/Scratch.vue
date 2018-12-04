@@ -23,7 +23,7 @@
               <div class="input-container-header">Training Data</div>
               <div class="input-container-contents">
                 <type1 v-if="inputStage == 'Sequence Prediction'"></type1>
-                <!--<type2 v-if="inputStage == 'Number Recognition'"></type2> -->
+                <type2 v-if="inputStage == 'Number Recognition'"></type2>
                 <drawing-paper :model="model" v-if="inputStage == 'Number Recognition'"></drawing-paper>
               </div>
             </div>

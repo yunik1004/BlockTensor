@@ -108,9 +108,10 @@ export default {
         showCancelButton: true,
         confirmButtonText: 'Go!',
         cancelButtonText: 'Cancel',
-        cancelButtonColor: '#d33'
+        cancelButtonColor: '#d33',
+        allowOutsideClick: false
       }).then((goStage) => {
-        if (goStage) {
+        if (goStage.value) {
           this.$router.push({
             name: 'Scratch',
             params: {
@@ -431,7 +432,7 @@ export default {
   display: block;
   width: 100%;
   height: 168px;
-  top: 98px;
+  top: 129px;
   background: #31353e;
   margin: 0 auto;
 }
