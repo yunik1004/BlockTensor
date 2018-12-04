@@ -58,6 +58,9 @@ export default {
       this.inputs.push(this.input3)
       this.inputs.push(this.input4)
       this.inputs.push(this.input5)
+
+      this.$store.state.test1inputs = []
+      this.$store.state.test1inputs = this.inputs
     },
     changeOnLabel: function () {
       this.labels = []
@@ -66,11 +69,17 @@ export default {
       this.labels.push(this.label3)
       this.labels.push(this.label4)
       this.labels.push(this.label5)
+
+      this.$store.state.test1labels = []
+      this.$store.state.test1labels = this.labels
     },
     changeOnTest: function () {
       this.tests = []
       this.tests.push(this.test1)
       this.tests.push(this.test2)
+
+      this.$store.state.test1tests = []
+      this.$store.state.test1tests = this.tests
     }
   }
 }
@@ -85,21 +94,18 @@ export default {
 .training-data-data {
   position: relative;
   margin: 5px;
-  top: 40px;
-  right: 32px;
 }
 
 .training-data-labels {
   position: relative;
   margin: 5px;
-  top: 45px;
-  right: 20px;
+  left: 12px;
 }
 
 .training-result {
   position: relative;
-  top: 300px;
-  right: 70px;
+  margin: 5px;
+  right: 59px;
 }
 
 input {

@@ -2,7 +2,7 @@ const MnistData = require('./getData/MnistData')
 
 let StageDataDB = {}
 
-StageDataDB['1'] = function () {
+StageDataDB['Sequence Prediction'] = function () {
   let trainData = [1, 2, 3, 4, 5]
   let trainDataSize = [5, 1]
 

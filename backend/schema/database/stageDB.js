@@ -1,6 +1,6 @@
 let StageDB = {}
 
-StageDB['1'] = {
+StageDB['Sequence Prediction'] = {
   'tag': '1',
   'info': 'Stage 1',
   'details': 'details',

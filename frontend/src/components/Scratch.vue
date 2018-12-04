@@ -20,9 +20,15 @@
         <div class="row">
           <div class="col-sm-4 top-pos">
             <div class="input-container">
-              <div class="input-container-header">Training Data</div>
-              <type1 v-if="inputStage == 1"></type1>
-              <type2 v-if="inputStage == 2"></type2>
+              <div class="input-container-header">
+                <p class="tooltip-css">Training Data
+                  <span class="tooltip-css-text">......</span>
+                </p>
+              </div>
+              <div class="input-container-contents">
+                <type1 v-if="inputStage == 'Sequence Prediction'"></type1>
+                <type2 v-if="inputStage == 2"></type2>
+              </div>
             </div>
             <div class="result-container">
               <div class="result-container-header">Training Result</div>
@@ -277,6 +283,12 @@ export default {
   },
   methods: {
     runCode: function () {
+      // eslint-disable-next-line
+      this.trainData = tf.tensor(this.$store.state.test1inputs, [5, 1])
+      // eslint-disable-next-line
+      this.trainLabels = tf.tensor(this.$store.state.test1labels, [5, 1])
+      this.testdata = this.$store.state.test1tests
+
       this.trainResults['loss'] = []
       this.trainResults['val_loss'] = []
 
@@ -432,37 +444,86 @@ export default {
 }
 
 .result-container {
-  position: absolute;
-  top: 150px;
-  left: 82px;
-  width: 200px;
+  position: relative;
+  width: 400%;
+  height: 40%;
+  top: 50%;
+  display: block;
+  text-align: left;
 }
 
 .result-container-header {
-  position: absolute;
+  position: relative;
   font-size: 25px;
   line-height: 25px;
   font-weight: bolder;
+  left: 50px;
 }
 
 .result-container-result {
-  position: absolute;
-  left: 25px;
-  top: 35px;
+  position: relative;
+  left: 60px;
+  top: 15px;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+  height: 60%;
 }
 
 .input-container-header {
-  position: absolute;
+  position: relative;
   font-size: 25px;
   line-height: 25px;
   font-weight: bolder;
-  left: 80px;
+  text-align: left;
+  left: 50px;
+}
+
+.input-container-contents {
+  position: relative;
 }
 
 .test-container {
   position: relative;
-  top: 15px;
-  left: -75px;
+  text-align: left;
+  left: 60px;
 }
 
+.tooltip-css {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px dotted blue;
+}
+
+.tooltip-css .tooltip-css-text {
+  visibility: hidden;
+  width: 200px;
+  background: indigo;
+  color: yellow;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px 5px;
+  position: absolute;
+  top: 200%;
+  left: 50%;
+  margin-left: -105px;
+  z-index: 10;
+}
+
+.tooltip-css:hover .tooltip-css-text {
+  visibility: visible;
+}
+
+.tooltip-css .tooltip-css-text::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent indigo transparent;
+}
 </style>
