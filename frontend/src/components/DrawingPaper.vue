@@ -2,9 +2,8 @@
   <div>
     <canvas id="gaf" width="200" height="200" style="border: 1px black solid;"></canvas>
     <canvas id="dstcvs" width="28" height="28" style="border: 1px black solid; display: none;"></canvas>
-    <bar-chart :height="150" :chart-data="showDigitPriority()"></bar-chart>
-    <button id="clearCanvas" type="button" v-on:click="canvasClear()">Clear</button>
-    <button id="go" type="button" v-on:click="canvasPredict()">Predict!</button>
+    <button id="clearCanvas" type="button" class="btn btn-sm btn-outline-danger" v-on:click="canvasClear()" style="position: absolute">X</button>
+    <!--<button id="go" type="button" v-on:click="canvasPredict()">Predict!</button> -->
   </div>
 </template>
 
@@ -24,6 +23,9 @@ export default {
   },
   mounted () {
     this.initCanvas()
+
+    window.addEventListener('resize', this.onResize, false)
+    this.onResize()
   },
   methods: {
     initCanvas: function () {
@@ -99,6 +101,20 @@ export default {
           }
         ]
       }
+    },
+    onResize: function (e) {
+      let gaf = document.getElementById('gaf')
+      let clearCanvas = document.getElementById('clearCanvas')
+
+      let element = gaf
+      let x = 0
+      do {
+        x += element.offsetLeft
+        element = element.offsetParent
+      } while (element)
+
+      clearCanvas.style.left = x + gaf.offsetWidth - 48 + 'px'
+      clearCanvas.style.top = '3px'
     }
   }
 }

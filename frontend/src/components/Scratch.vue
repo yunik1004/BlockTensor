@@ -20,12 +20,11 @@
         <div class="row">
           <div class="col-sm-4 top-pos">
             <div class="input-container">
-              <div class="input-container-header">Training Data
-                <drawing-paper :model="model" v-if="inputStage == 'Number Recognition'"></drawing-paper>
-              </div>
+              <div class="input-container-header">Training Data</div>
               <div class="input-container-contents">
                 <type1 v-if="inputStage == 'Sequence Prediction'"></type1>
-                <type2 v-if="inputStage == 'Number Recognition'"></type2>
+                <!--<type2 v-if="inputStage == 'Number Recognition'"></type2> -->
+                <drawing-paper :model="model" v-if="inputStage == 'Number Recognition'"></drawing-paper>
               </div>
             </div>
             <div class="result-container">
@@ -39,14 +38,15 @@
           <div class="classchart">
             <line-chart :chart-data="trainLossCollection"></line-chart>
           </div>
-          <div class="classchart">
+          <div class="classchart" v-if="inputStage == 'Number Recognition'">
             <line-chart :chart-data="trainAccCollection"></line-chart>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4 bottom-pos">
             <div class="test-container">
-              <p>Expected output: {{testLabels}}</p>
+              <p v-if="inputStage == 'Sequence Prediction'">Expected output: {{testLabels}}</p>
+              <show-digits class="classdigitshow" v-if="inputStage == 'Number Recognition'" :predict="testLabels"></show-digits>
             </div>
           </div>
           <div class="col-sm-8" id="blocklyArea"></div>
@@ -206,14 +206,14 @@ export default {
             fill: false,
             data: this.trainResults.loss,
             borderColor: 'blue',
-            borderWidth: 1,
+            borderWidth: 1
           },
           {
             label: 'Val Loss',
             fill: false,
             data: this.trainResults.val_loss,
             borderColor: 'red',
-            borderWidth: 1,
+            borderWidth: 1
           }
         ]
       }
@@ -230,14 +230,14 @@ export default {
             fill: false,
             data: this.trainResults.acc,
             borderColor: 'blue',
-            borderWidth: 1,
+            borderWidth: 1
           },
           {
             label: 'Val Acc',
             fill: false,
             data: this.trainResults.val_acc,
             borderColor: 'red',
-            borderWidth: 1,
+            borderWidth: 1
           }
         ]
       }
@@ -303,7 +303,8 @@ export default {
     'line-chart': LineChart,
     'type1': () => import('../components/type1'),
     'type2': () => import('../components/type2'),
-    'drawing-paper': () => import('../components/DrawingPaper')
+    'drawing-paper': () => import('../components/DrawingPaper'),
+    'show-digits': () => import('./chart/ShowDigits')
   },
   methods: {
     runCode: function () {
@@ -343,8 +344,28 @@ export default {
         })
         return
       }
-      // eslint-disable-next-line
-      this.testLabels = this.model.predictOnBatch(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
+
+      if (this.inputStage === 'Sequence Prediction') {
+        // eslint-disable-next-line
+        this.testLabels = this.model.predictOnBatch(tf.tensor(this.testData, [this.testData.length, 1])).dataSync()
+      } else if (this.inputStage === 'Number Recognition') {
+        const canvas = document.getElementById('gaf')
+
+        const dstcvs = document.getElementById('dstcvs')
+        dstcvs.getContext('2d').drawImage(canvas, 0, 0, 200, 200, 0, 0, 28, 28)
+
+        let imgdata = dstcvs.getContext('2d').getImageData(0, 0, 28, 28)
+
+        const { data } = imgdata
+
+        let input = new Float32Array(28 * 28)
+        for (let i = 0, len = data.length; i < len; i += 4) {
+          input[i / 4] = data[i + 3] / 255
+        }
+
+        // eslint-disable-next-line
+        this.testLabels = this.model.predictOnBatch(tf.tensor(input, [1, 28, 28, 1])).dataSync()
+      }
     },
     initializeStartBlocks: function () {
       Blockly.defineBlocksWithJsonArray([{
@@ -458,6 +479,11 @@ export default {
   left: 50px;
   width: 250px !important;
   height: 250px !important;
+}
+
+.classdigitshow {
+  position: relative;
+  width: 300px !important;
 }
 
 .top-pos {
