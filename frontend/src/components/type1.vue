@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="training-data">
-      <div class="training-data-data">position:
+      <div class="training-data-data">
+        <p class="tooltip-css">position:<span class="tooltip-css-text">Position of sequence, (ex: first, second, third ...)</span></p>
         <input class="training-data-data--input" type="text" v-model="input1" size="2" maxlength="3" @change="changeOnData()">
         <input class="training-data-data--input" type="text" v-model="input2" size="2" maxlength="3" @change="changeOnData()">
         <input class="training-data-data--input" type="text" v-model="input3" size="2" maxlength="3" @change="changeOnData()">
         <input class="training-data-data--input" type="text" v-model="input4" size="2" maxlength="3" @change="changeOnData()">
         <input class="training-data-data--input" type="text" v-model="input5" size="2" maxlength="3" @change="changeOnData()">
       </div>
-      <div class="training-data-labels">sequence:
+      <div class="training-data-labels">
+        <p class="tooltip-css">sequence:<span class="tooltip-css-text">Value of sequence</span></p>
         <input class="training-data-data--label" type="text" v-model="label1" size="2" maxlength="3" @change="changeOnLabel()">
         <input class="training-data-data--label" type="text" v-model="label2" size="2" maxlength="3" @change="changeOnLabel()">
         <input class="training-data-data--label" type="text" v-model="label3" size="2" maxlength="3" @change="changeOnLabel()">
@@ -16,7 +18,8 @@
         <input class="training-data-data--label" type="text" v-model="label5" size="2" maxlength="3" @change="changeOnLabel()">
       </div>
     </div>
-    <div class="training-result">test position:
+    <div class="training-result">
+      <p class="tooltip-css">test position:<span class="tooltip-css-text">What will be the value of this position?</span></p>
       <input class="training-result--test" type="text" v-model="test1" size="2" maxlength="3">
       <input class="training-result--test" type="text" v-model="test2" size="2" maxlength="3">
     </div>
@@ -51,19 +54,19 @@ export default {
       progressSteps: ['1', '2', '3', '4']
     }).queue([
       {
-        text: 'This is a model block.',
+        text: 'This is a model block. You can start to create model with this block. You can change the loss function and optimizer.',
         imageUrl: require('../assets/model_block.png')
       },
       {
-        text: 'This is a dense layer block.',
+        text: 'This is a dense layer block. Dense layer is a fully connected layer with all neurons of previous layer. All inputs and outputs are connected.',
         imageUrl: require('../assets/dense_layer_block.png')
       },
       {
-        text: 'This is a activation layer block.',
+        text: 'This is a activation layer block. You can choose an activation function such as Relu and sigmoid. This is used for detemination of activation or deactivation.',
         imageUrl: require('../assets/activation_layer_block.png')
       },
       {
-        text: 'This is a model trainer block.',
+        text: 'This is a model trainer block. You can complete your own model with this block. You can change the training attributes.',
         imageUrl: require('../assets/model_trainer_block.png'),
         confirmButtonText: 'Start!'
       }])
@@ -136,5 +139,45 @@ input {
   border-bottom: solid 1px #31353e;
   text-align: center;
   margin: 1px;
+}
+
+.tooltip-css {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px dotted blue;
+  margin: 0;
+  padding: 0;
+}
+
+.tooltip-css .tooltip-css-text {
+  visibility: hidden;
+  width: 200px;
+  background: #FFFAF4;
+  color: black;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px 5px;
+  position: absolute;
+  top: 200%;
+  left: 50%;
+  margin-left: -105px;
+  z-index: 10;
+  font-weight: lighter;
+  font-size: 15px;
+}
+
+.tooltip-css:hover .tooltip-css-text {
+  visibility: visible;
+}
+
+.tooltip-css .tooltip-css-text::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #FFFAF4 transparent;
 }
 </style>
