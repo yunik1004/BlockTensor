@@ -23,7 +23,11 @@
                   <div class="card-carousel--overflow-container">
                       <div class="card-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')' }">
                           <div id="cards" class="card-carousel--card" v-for="item in items" :key="item.name" @click="stageInfo(item.name, item.info)">
-                              <img src="https://placehold.it/200x200">
+                              <img v-if="item.name == 'Sequence Prediction'" src="../stages/stage1.png" width="200" height="200">
+                              <img v-if="item.name == 'Number Recognition'" src="../stages/stage2.png" width="200" height="200">
+                              <img v-if="item.name == 'Cats & Dogs Classification'" src="../stages/stage3.png" width="200" height="200">
+                              <img v-if="item.name == 'Facial App Protector'" src="../stages/stage4.png" width="200" height="200">
+                              <img v-if="item.name == 'Tic Tac Toe Learning'" src="../stages/stage5.png" width="200" height="200">
                               <div class="card-carousel--card--footer">
                                   <p class="card-item-name">{{ item.name }}</p>
                                   <p class="card-item-tag">{{ item.tag }}</p>
