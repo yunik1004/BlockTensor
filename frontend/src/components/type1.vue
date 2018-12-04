@@ -8,7 +8,7 @@
         <input class="training-data-data--input" type="text" v-model="input4" size="2" maxlength="3" @change="changeOnData()">
         <input class="training-data-data--input" type="text" v-model="input5" size="2" maxlength="3" @change="changeOnData()">
       </div>
-      <div class="training-data-labels">label:
+      <div class="training-data-labels">sequence:
         <input class="training-data-data--label" type="text" v-model="label1" size="2" maxlength="3" @change="changeOnLabel()">
         <input class="training-data-data--label" type="text" v-model="label2" size="2" maxlength="3" @change="changeOnLabel()">
         <input class="training-data-data--label" type="text" v-model="label3" size="2" maxlength="3" @change="changeOnLabel()">
@@ -16,7 +16,7 @@
         <input class="training-data-data--label" type="text" v-model="label5" size="2" maxlength="3" @change="changeOnLabel()">
       </div>
     </div>
-    <div class="training-result">test data:
+    <div class="training-result">test position:
       <input class="training-result--test" type="text" v-model="test1" size="2" maxlength="3">
       <input class="training-result--test" type="text" v-model="test2" size="2" maxlength="3">
     </div>
@@ -99,13 +99,13 @@ export default {
 .training-data-labels {
   position: relative;
   margin: 5px;
-  left: 12px;
+  left: -6px;
 }
 
 .training-result {
   position: relative;
   margin: 5px;
-  right: 59px;
+  right: 71px;
 }
 
 input {

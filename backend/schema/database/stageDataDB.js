@@ -16,7 +16,7 @@ StageDataDB['Sequence Prediction'] = function () {
   }
 }
 
-StageDataDB['B'] = function () {
+StageDataDB['Number Recognition'] = function () {
   let mnistTrainData = MnistData.getTrainData()
 
   return {
@@ -26,7 +26,7 @@ StageDataDB['B'] = function () {
   }
 }
 
-StageDataDB['C'] = function () {
+StageDataDB['Cats & Dogs Classification'] = function () {
   let trainData = [1, 2, 3, 4, 5]
   let trainDataSize = [5, 1]
 
@@ -40,7 +40,7 @@ StageDataDB['C'] = function () {
   }
 }
 
-StageDataDB['D'] = function () {
+StageDataDB['Facial App Protector'] = function () {
   let trainData = [1, 2, 3, 4, 5]
   let trainDataSize = [5, 1]
 
@@ -54,7 +54,7 @@ StageDataDB['D'] = function () {
   }
 }
 
-StageDataDB['E'] = function () {
+StageDataDB['Tic Tac Toe Learning'] = function () {
   let trainData = [1, 2, 3, 4, 5]
   let trainDataSize = [5, 1]
 

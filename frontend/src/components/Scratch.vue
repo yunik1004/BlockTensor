@@ -27,7 +27,7 @@
               </div>
               <div class="input-container-contents">
                 <type1 v-if="inputStage == 'Sequence Prediction'"></type1>
-                <type2 v-if="inputStage == 2"></type2>
+                <type2 v-if="inputStage == 'Number Recognition'"></type2>
               </div>
             </div>
             <div class="result-container">
