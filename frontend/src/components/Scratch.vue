@@ -35,12 +35,8 @@
               </div>
             </div>
           </div>
-          <div class="classchart">
-            <line-chart :chart-data="trainLossCollection"></line-chart>
-          </div>
-          <div class="classchart" v-if="inputStage == 'Number Recognition'">
-            <line-chart :chart-data="trainAccCollection"></line-chart>
-          </div>
+          <line-chart class="classchart" :chart-data="trainLossCollection"></line-chart>
+          <line-chart class="classchart" :chart-data="trainAccCollection" v-if="inputStage == 'Number Recognition'"></line-chart>
         </div>
         <div class="row">
           <div class="col-sm-4 bottom-pos">
@@ -477,7 +473,7 @@ export default {
 .classchart {
   position: relative;
   left: 50px;
-  width: 250px !important;
+  width: 400px !important;
   height: 250px !important;
 }
 
