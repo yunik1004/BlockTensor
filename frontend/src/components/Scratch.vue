@@ -24,7 +24,7 @@
                 <p class="tooltip-css">Training Data
                   <span class="tooltip-css-text">......</span>
                 </p>
-                <drawing-paper :model="model"></drawing-paper>
+                <drawing-paper :model="model" v-if="inputStage == 'Number Recognition'"></drawing-paper>
               </div>
               <div class="input-container-contents">
                 <type1 v-if="inputStage == 'Sequence Prediction'"></type1>
